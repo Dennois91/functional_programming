@@ -1,0 +1,70 @@
+package repository;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
+
+public class Repository {
+    private final Properties p = new Properties();
+    private final Connection connection;
+
+    public Repository() {
+        loadProperties();
+        connection = createConnection();
+    }
+
+    public List<Child> getChildrenList() {
+        List<Child> children = new ArrayList<>();
+        try (Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT name FROM child")) {
+            while (rs.next()) {
+                Child child = new Child();
+                child.setName(rs.getString("name"));
+                children.add(child);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return children;
+    }
+
+    public List<Elf> getElvesList() {
+        List<Elf> elves = new ArrayList<>();
+        try (Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT name FROM Elf")) {
+            while (rs.next()) {
+                Elf elf = new Elf();
+                elf.setName(rs.getString("name"));
+                elves.add(elf);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return elves;
+    }
+
+
+
+    private Connection createConnection() {
+        try {
+            return DriverManager.getConnection(p.getProperty("connectionString"),
+                    p.getProperty("username"), p.getProperty("password"));
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private void loadProperties() {
+        try {
+            p.load(new FileInputStream("resources/settings.properties"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+}
+
+

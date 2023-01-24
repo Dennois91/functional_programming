@@ -1,6 +1,6 @@
-package apps;
+package Assignment_1_2a.apps;
 
-import repository.Repository;
+import Assignment_1_2a.repository.Repository;
 
 import javax.swing.*;
 

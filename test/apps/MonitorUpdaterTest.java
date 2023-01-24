@@ -1,8 +1,6 @@
 package apps;
 
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
+import Assignment_1_2a.apps.MonitorUpdater;
 
 class MonitorUpdaterTest {
     MonitorUpdater monitorUpdater = new MonitorUpdater();

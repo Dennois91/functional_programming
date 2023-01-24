@@ -1,4 +1,4 @@
-package repository;
+package Assignment_1_2a.repository;
 
 import java.io.FileInputStream;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package apps;
+package Assignment_1_2a.apps;
 
 import Assignment_1_2a.apps.MonitorUpdater;
 

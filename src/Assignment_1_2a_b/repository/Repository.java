@@ -1,4 +1,4 @@
-package Assignment_1_2a.repository;
+package Assignment_1_2a_b.repository;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -18,20 +18,23 @@ public class Repository {
 
     public String getChildNameAndNice(String searchName) {
         String returnString = null;
-        try (Statement stmt = connection.createStatement();
-             ResultSet rs = stmt.executeQuery("SELECT name," +
-                     " case when report.niceOrNot = true then 'Has been nice' else 'Has been naughty' end as niceOrNot" +
-                     " FROM child join report " +
-                     "on child.id = report.childId WHERE name like '%" + searchName + "%'")) {
+        ResultSet rs;
+        try (PreparedStatement stmt = connection.prepareStatement("SELECT name, " +
+                "case when report.niceOrNot = true then 'Has been nice' else 'Has been naughty' end as niceOrNot" +
+                " FROM child JOIN report ON child.id = report.childId WHERE name = ?")) {
+            stmt.setString(1, searchName);
 
-            while (rs.next()) {
-                returnString = (rs.getString("name")) + " " + (rs.getString("niceOrNot"));
+            rs = stmt.executeQuery();
+            while (rs.next()){
+                returnString = rs.getString("name")+rs.getString("niceOrNot");
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
         return returnString;
     }
+
 
     public List<Child> getChildrenList() {
         List<Child> children = new ArrayList<>();

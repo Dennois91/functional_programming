@@ -1,6 +1,4 @@
-package Assignment_1_2a.apps;
-
-import Assignment_1_2a.apps.MonitorUpdater;
+package Assignment_1_2a_b.apps;
 
 class MonitorUpdaterTest {
     MonitorUpdater monitorUpdater = new MonitorUpdater();

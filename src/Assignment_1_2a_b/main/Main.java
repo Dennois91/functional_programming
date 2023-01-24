@@ -1,8 +1,8 @@
-package Assignment_1_2a.main;
+package Assignment_1_2a_b.main;
 
-import Assignment_1_2a.apps.MonitorUpdater;
-import Assignment_1_2a.apps.SearchChild;
-import Assignment_1_2a.repository.Repository;
+import Assignment_1_2a_b.apps.MonitorUpdater;
+import Assignment_1_2a_b.apps.SearchChild;
+import Assignment_1_2a_b.repository.Repository;
 
 public class Main {
     MonitorUpdater monitorUpdater = new MonitorUpdater();

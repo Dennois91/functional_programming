@@ -1,4 +1,4 @@
-package Assignment_1_2a.repository;
+package Assignment_1_2a_b.repository;
 
 public class Child {
    private int id;

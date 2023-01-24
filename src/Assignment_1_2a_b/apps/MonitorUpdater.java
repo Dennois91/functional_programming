@@ -1,8 +1,8 @@
-package Assignment_1_2a.apps;
+package Assignment_1_2a_b.apps;
 
-import Assignment_1_2a.repository.Child;
-import Assignment_1_2a.repository.Elf;
-import Assignment_1_2a.repository.Repository;
+import Assignment_1_2a_b.repository.Child;
+import Assignment_1_2a_b.repository.Elf;
+import Assignment_1_2a_b.repository.Repository;
 
 import java.util.List;
 

@@ -1,31 +1,15 @@
-import org.w3c.dom.ls.LSOutput;
-import repository.*;
+package main;
 
-import java.util.List;
+import apps.Monitor;
 
 public class Main {
-    Repository r = new Repository();
-    private List<Child> childrenList;
-    private List<Elf> elvesList;
-    private int children = 0;
-    private int elves = 0;
+    Monitor monitor = new Monitor();
+    Thread thread = new Thread(monitor);
 
     public Main() {
-        childrenList = r.getChildrenList();
-        for (Child child : childrenList) {
-            children += 1;
-        }
-        System.out.println(children + " " + "st barn");
-        elvesList = r.getElvesList();
-        for (Elf elf : elvesList) {
-            elves += 1;
-            System.out.println(elf.getName()+" "+ "Nisse: "+ elves);
-        }
-
-
-        System.out.println(elves + " " + "st nissar");
+            thread.start();
+            System.out.println("Thred started");
     }
-
 
     public static void main(String[] args) {
         new Main();

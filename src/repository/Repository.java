@@ -19,10 +19,12 @@ public class Repository {
     public List<Child> getChildrenList() {
         List<Child> children = new ArrayList<>();
         try (Statement stmt = connection.createStatement();
-             ResultSet rs = stmt.executeQuery("SELECT name FROM child")) {
+             ResultSet rs = stmt.executeQuery("SELECT name,report.niceOrNot" +
+                     " FROM child join report on child.id = report.childId")) {
             while (rs.next()) {
                 Child child = new Child();
                 child.setName(rs.getString("name"));
+                child.setNiceOrNot(rs.getBoolean("niceOrNot"));
                 children.add(child);
             }
         } catch (SQLException e) {

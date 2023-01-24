@@ -5,6 +5,15 @@ public class Child {
    private String name;
    private String adress;
    private int countryId;
+   private boolean niceOrNot;
+
+    public boolean isNiceOrNot() {
+        return niceOrNot;
+    }
+
+    public void setNiceOrNot(boolean niceOrNot) {
+        this.niceOrNot = niceOrNot;
+    }
 
     public int getId() {
         return id;

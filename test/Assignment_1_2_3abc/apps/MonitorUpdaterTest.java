@@ -1,4 +1,4 @@
-package Assignment_1_2a_b.apps;
+package Assignment_1_2_3abc.apps;
 
 class MonitorUpdaterTest {
     MonitorUpdater monitorUpdater = new MonitorUpdater();

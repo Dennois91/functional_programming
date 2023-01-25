@@ -1,4 +1,4 @@
-package Assignment_1_2a_b.repository;
+package Assignment_1_2_3abc.repository;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -25,8 +25,8 @@ public class Repository {
             stmt.setString(1, searchName);
 
             rs = stmt.executeQuery();
-            while (rs.next()){
-                returnString = rs.getString("name")+rs.getString("niceOrNot");
+            while (rs.next()) {
+                returnString = rs.getString("name") + rs.getString("niceOrNot");
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -86,6 +86,69 @@ public class Repository {
             throw new RuntimeException(e);
         }
     }
+
+    public void changeElfNameByName(String name, String newName) {
+
+        String query = "UPDATE elf SET name = ? WHERE name like ? ;";
+
+        try (Connection con = DriverManager.getConnection(p.getProperty("connectionString"),
+                p.getProperty("username"), p.getProperty("password"));
+             PreparedStatement stmt = con.prepareStatement(query)) {
+            stmt.setString(1, newName);
+            stmt.setString(2, name);
+            int rowChanged = stmt.executeUpdate();
+            switch (rowChanged) {
+                case 0 -> System.out.println("no elf with that name found");
+                case 1 -> System.out.println("Elf" + name + " changed name to " + newName);
+                default -> System.out.println("Several names changed name to " + newName);
+
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void deleteElfByName(String name) {
+
+        String query = "DELETE FROM elf WHERE name = ? ;";
+
+        try (Connection con = DriverManager.getConnection(p.getProperty("connectionString"),
+                p.getProperty("username"), p.getProperty("password"));
+             PreparedStatement stmt = con.prepareStatement(query)) {
+            stmt.setString(1, name);
+
+            int rowChanged = stmt.executeUpdate();
+            switch (rowChanged) {
+                case 0 -> System.out.println("no elf with that name found");
+                case 1 -> System.out.println("Elf " + name + " Fired");
+                default -> System.out.println("Several elves with " + name + " fired");
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void addNewGift(String name) {
+
+        String query = "INSERT INTO present (name) VALUES (?);";
+
+        try (Connection con = DriverManager.getConnection(p.getProperty("connectionString"),
+                p.getProperty("username"), p.getProperty("password"));
+             PreparedStatement stmt = con.prepareStatement(query)) {
+            stmt.setString(1, name);
+
+            int rowChanged = stmt.executeUpdate();
+
+            switch (rowChanged) {
+                case 0 -> System.out.println("No gift added");
+                case 1 -> System.out.println("Gift " + name + " added");
+                default -> System.out.println("Unexpected error");
+
+
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
-
-

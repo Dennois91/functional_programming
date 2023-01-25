@@ -1,8 +1,8 @@
-package Assignment_1_2_3abc.main;
+package Assignment_1_to_6.main;
 
-import Assignment_1_2_3abc.apps.MonitorUpdater;
-import Assignment_1_2_3abc.apps.Manager;
-import Assignment_1_2_3abc.repository.Repository;
+import Assignment_1_to_6.apps.MonitorUpdater;
+import Assignment_1_to_6.apps.Manager;
+import Assignment_1_to_6.repository.Repository;
 
 public class Main {
     MonitorUpdater monitorUpdater = new MonitorUpdater();
@@ -14,7 +14,9 @@ public class Main {
         // new Manager().getChildByName();
         // new Manager().changeElfNameByName();
         // new Manager().deleteElfByName();
-        new Manager().addNewGift();
+        // new Manager().addNewGift();
+        // new Manager().addGiftTroughSP();
+        new Manager().addNewManufacturingElfSP();
         thread.interrupt();
     }
 

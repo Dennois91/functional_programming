@@ -1,6 +1,6 @@
-package Assignment_1_2_3abc.apps;
+package Assignment_1_to_6.apps;
 
-import Assignment_1_2_3abc.repository.Repository;
+import Assignment_1_to_6.repository.Repository;
 
 import javax.swing.*;
 
@@ -51,11 +51,31 @@ public class Manager {
 
     public void addNewGift() {
         while (true) {
-            String name = JOptionPane.showInputDialog(null, "Type name of gift to add a gift");
+            String name = JOptionPane.showInputDialog(null, "Type name of gift to add a gift:");
             if (name == null) {
                 break;
             }
             r.addNewGift(name);
+        }
+    }
+
+    public void addGiftTroughSP() {
+        while (true) {
+            String name = JOptionPane.showInputDialog(null, "Type name of gift you want to add:");
+            if (name == null) {
+                break;
+            }
+            r.callAddGift(name);
+        }
+    }
+
+    public void addNewManufacturingElfSP() {
+        while (true) {
+            String name = JOptionPane.showInputDialog(null, "Type name of gift you want to add:");
+            if (name == null) {
+                break;
+            }
+            r.callAddNewManufacturingElfSP(name);
         }
     }
 }

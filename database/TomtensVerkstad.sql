@@ -6,7 +6,7 @@ use tomtedatabase;
 create table elf
 (
     id   int         not null auto_increment primary key,
-    name varchar(30) not null
+    name varchar(30) not null unique
 );
 
 create table blacklist
@@ -98,9 +98,9 @@ values ('Santa'),
        ('Trotter'),
        ('Prosit'),
        ('Butter'),
-       ('Glader'),
+       ('Gladare'),
        ('Blyger'),
-       ('Blyger'),
+       ('Blygare'),
        ('Skumtomten');
 
 insert into intelligenceelf (elfId, securityLevel)
@@ -355,3 +355,27 @@ select child.name as ChildName,
 From child
          INNER JOIN report on child.id = report.childId
          INNER JOIN country ON child.countryId = country.id;
+
+drop procedure if exists addManufacturingElf;
+delimiter //
+create procedure addManufacturingElf(in elfName varchar(50))
+begin
+    declare lastId int default 0;
+    insert into elf (name) VALUES (elfName);
+    SELECT LAST_INSERT_ID() INTO lastId;
+    insert into makerelf (elfId) VALUES (lastId);
+end//
+delimiter ;
+
+
+drop procedure if exists addPresent;
+delimiter //
+
+create procedure addPresent(in presentName varchar(50))
+begin
+    insert into present (name) VALUES (presentName);
+end//
+
+delimiter ;
+
+

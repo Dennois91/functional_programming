@@ -1,8 +1,8 @@
-package Assignment_1_2_3abc.apps;
+package Assignment_1_to_6.apps;
 
-import Assignment_1_2_3abc.repository.Child;
-import Assignment_1_2_3abc.repository.Elf;
-import Assignment_1_2_3abc.repository.Repository;
+import Assignment_1_to_6.repository.Child;
+import Assignment_1_to_6.repository.Elf;
+import Assignment_1_to_6.repository.Repository;
 
 import java.util.List;
 

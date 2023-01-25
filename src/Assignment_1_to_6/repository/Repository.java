@@ -1,4 +1,4 @@
-package Assignment_1_2_3abc.repository;
+package Assignment_1_to_6.repository;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -149,6 +149,35 @@ public class Repository {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public void callAddGift(String name) {
+
+        try (Connection con = DriverManager.getConnection(
+                p.getProperty("connectionString"),
+                p.getProperty("username"),
+                p.getProperty("password"));
+
+             CallableStatement stm = con.prepareCall("CALL addPresent(?)")) {
+            stm.setString(1, name);
+            stm.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void callAddNewManufacturingElfSP(String name) {
+        try (Connection con = DriverManager.getConnection(
+                p.getProperty("connectionString"),
+                p.getProperty("username"),
+                p.getProperty("password"));
+
+             CallableStatement stm = con.prepareCall("CALL addManufacturingElf(?)")) {
+            stm.setString(1, name);
+            stm.execute();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
     }
 }

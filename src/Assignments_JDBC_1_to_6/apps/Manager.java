@@ -1,6 +1,6 @@
-package Assignment_1_to_6.apps;
+package Assignments_JDBC_1_to_6.apps;
 
-import Assignment_1_to_6.repository.Repository;
+import Assignments_JDBC_1_to_6.repository.Repository;
 
 import javax.swing.*;
 

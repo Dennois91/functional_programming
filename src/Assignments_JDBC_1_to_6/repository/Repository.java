@@ -1,4 +1,4 @@
-package Assignment_1_to_6.repository;
+package Assignments_JDBC_1_to_6.repository;
 
 import java.io.FileInputStream;
 import java.io.IOException;

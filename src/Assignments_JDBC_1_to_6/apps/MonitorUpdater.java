@@ -1,8 +1,8 @@
-package Assignment_1_to_6.apps;
+package Assignments_JDBC_1_to_6.apps;
 
-import Assignment_1_to_6.repository.Child;
-import Assignment_1_to_6.repository.Elf;
-import Assignment_1_to_6.repository.Repository;
+import Assignments_JDBC_1_to_6.repository.Child;
+import Assignments_JDBC_1_to_6.repository.Elf;
+import Assignments_JDBC_1_to_6.repository.Repository;
 
 import java.util.List;
 

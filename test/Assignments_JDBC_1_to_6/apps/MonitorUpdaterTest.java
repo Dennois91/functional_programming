@@ -1,4 +1,4 @@
-package Assignment_1_to_6.apps;
+package Assignments_JDBC_1_to_6.apps;
 
 class MonitorUpdaterTest {
     MonitorUpdater monitorUpdater = new MonitorUpdater();

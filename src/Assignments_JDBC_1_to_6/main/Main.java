@@ -1,8 +1,8 @@
-package Assignment_1_to_6.main;
+package Assignments_JDBC_1_to_6.main;
 
-import Assignment_1_to_6.apps.MonitorUpdater;
-import Assignment_1_to_6.apps.Manager;
-import Assignment_1_to_6.repository.Repository;
+import Assignments_JDBC_1_to_6.apps.MonitorUpdater;
+import Assignments_JDBC_1_to_6.apps.Manager;
+import Assignments_JDBC_1_to_6.repository.Repository;
 
 public class Main {
     MonitorUpdater monitorUpdater = new MonitorUpdater();

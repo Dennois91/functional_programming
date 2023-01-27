@@ -1,21 +1,23 @@
 package Examination.Controller;
 
+import Examination.Model.Repository;
+
 import javax.swing.*;
 import java.awt.*;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
+
 
 public class StoreTable extends JFrame {
     private JPanel storePanel;
-    private JList list1;
+    private JList<String> list1;
     private JTextField searchField;
     private JButton searchButton;
     private JComboBox dropDownMenu;
     private JButton createOrderB;
     private JButton addToCartB;
     private JButton removeFromCartB;
+    private final Repository r = new Repository();
+    private int dropDownMenuIndex;
 
     public StoreTable() throws HeadlessException {
 
@@ -33,10 +35,24 @@ public class StoreTable extends JFrame {
             }
         });
 
+        dropDownMenu.addActionListener(l -> showReports(dropDownMenu));
     }
 
-    public JPanel getStorePanel() {
-        return storePanel;
+    public void showReports(JComboBox dropDownMenu) {
+        switch (dropDownMenu.getSelectedIndex()) {
+            case 0 -> showInventoryList();
+            case 1 -> System.out.println("report 1");
+            case 2 -> System.out.println("report 2");
+            case 3 -> System.out.println("report 3");
+            case 4 -> System.out.println("report 4");
+            default -> JOptionPane.showMessageDialog(null, "Unexpected error from reports",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public void showInventoryList() {
+        ListModel<String> listModel = r.displayInventory();
+        list1.setModel(listModel);
     }
 
 

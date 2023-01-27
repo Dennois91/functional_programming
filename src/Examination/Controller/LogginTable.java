@@ -24,7 +24,8 @@ public class LogginTable extends JFrame implements ActionListener {
         loginBut.addActionListener(l -> {
             if (accesGranted) {
                 dispose();
-                setContentPane(new StoreTable());
+                StoreTable storeTable = new StoreTable();
+                storeTable.showInventoryList();
                 revalidate();
                 repaint();
             } else {

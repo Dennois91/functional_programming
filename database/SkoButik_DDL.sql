@@ -67,17 +67,20 @@ CREATE TABLE skoKatMapp
 (
     id       int not null auto_increment primary key,
     skoId    int not null,
-    kategori int not null
+    kategoriId int not null,
+    foreign key (skoId) references sko (id),
+    foreign key (kategoriId) references kategori (id)
 );
 
 CREATE TABLE kund
 (
-    id     int          not null auto_increment primary key,
-    email  varchar(100) not null,
-    namn   varchar(100),
-    adress varchar(100),
-    skapad timestamp default current_timestamp,
-    ändrad timestamp default current_timestamp on update current_timestamp
+    id       int          not null auto_increment primary key,
+    email    varchar(100) not null,
+    namn     varchar(100),
+    adress   varchar(100),
+    password varchar(50),
+    skapad   timestamp default current_timestamp,
+    ändrad   timestamp default current_timestamp on update current_timestamp
 );
 
 CREATE TABLE beställning
@@ -165,7 +168,7 @@ VALUES (1, 1, 1, 1, 1, 10),
        (3, 1, 2, 2, 8, 10),
        (3, 1, 3, 2, 8, 10);
 
-INSERT INTO skoKatMapp(skoId, kategori)
+INSERT INTO skoKatMapp(skoId, kategoriId)
 VALUES (1, 1),
        (1, 4),
        (2, 1),
@@ -215,12 +218,12 @@ VALUES (1, 1),
        (24, 1),
        (24, 5);
 
-INSERT INTO kund(email, namn, adress)
-VALUES ('pelle@gmail.se', 'Pelle', 'Stockholm'),
-       ('kalle@gmail.se', 'Kalle', 'Norrland'),
-       ('telle@gmail.se', 'Telle', 'Skåne'),
-       ('putte@gmail.se', 'Putte', 'Stockholm'),
-       ('nutte@gmail.se', 'Nutte', 'Stockholm');
+INSERT INTO kund(email, namn, password, adress)
+VALUES ('pelle@gmail.se', 'Pelle','Pelle', 'Stockholm'),
+       ('kalle@gmail.se', 'Kalle','Kalle', 'Norrland'),
+       ('telle@gmail.se', 'Telle','Telle', 'Skåne'),
+       ('putte@gmail.se', 'Putte','Putte', 'Stockholm'),
+       ('nutte@gmail.se', 'Nutte','Nutte', 'Stockholm');
 
 INSERT INTO beställning(kundId, totalPris)
 VALUES (1, 1700),
@@ -368,5 +371,17 @@ BEGIN
 END //
 DELIMITER ;
 
-CALL AddToCart(5, 0, 24);
+DELIMITER //
+DROP PROCEDURE IF EXISTS getInventory //
+CREATE PROCEDURE getInventory()
+    BEGIN SELECT märke.märke,model.model,färg.färg,storlek.storlek,pris.pris,lagerSaldo FROM sko
+    join märke on sko.märkeId = märke.id
+    join model on sko.modelId = model.id
+    join färg on sko.färgId = färg.id
+    join storlek on sko.storlekId = storlek.id
+    join pris on sko.prisId = pris.id;
+    END;
+DELIMITER ;
+-- CALL AddToCart(5, 0, 24);
 -- CALL deleteKund(5);
+-- CALL getInventory();

@@ -9,7 +9,11 @@
     <children>
       <scrollpane id="d355c">
         <constraints border-constraint="Center"/>
-        <properties/>
+        <properties>
+          <horizontalScrollBarPolicy value="30"/>
+          <inheritsPopupMenu value="false"/>
+          <verticalScrollBarPolicy value="22"/>
+        </properties>
         <border type="none"/>
         <children>
           <component id="19de1" class="javax.swing.JList" binding="list1" default-binding="true">
@@ -49,7 +53,7 @@
             </constraints>
             <properties>
               <model>
-                <item value=""/>
+                <item value="List all shoes"/>
                 <item value="List orders per customer"/>
                 <item value="List customer and total spent"/>
                 <item value="List total spent per city"/>

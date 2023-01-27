@@ -14,4 +14,5 @@ public class Beställning {
         this.skapad = skapad;
         this.ändrad = ändrad;
     }
+
 }

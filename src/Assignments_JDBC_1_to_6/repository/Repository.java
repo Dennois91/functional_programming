@@ -133,8 +133,10 @@ public class Repository {
 
         String query = "INSERT INTO present (name) VALUES (?);";
 
-        try (Connection con = DriverManager.getConnection(p.getProperty("connectionString"),
-                p.getProperty("username"), p.getProperty("password"));
+        try (Connection con = DriverManager.getConnection(
+                p.getProperty("connectionString"),
+                p.getProperty("username"),
+                p.getProperty("password"));
              PreparedStatement stmt = con.prepareStatement(query)) {
             stmt.setString(1, name);
 

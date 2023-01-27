@@ -46,11 +46,12 @@ public class Repository {
             throw new RuntimeException(e);
         }
     }
+
     private <T> List<T> executeQuery(String query, Function<ResultSet, T> mapper) {
         List<T> result = new ArrayList<>();
         try (Connection con = DriverManager.getConnection(
                 p.getProperty("connectionString"),
-                p.getProperty("name"),
+                p.getProperty("username"),
                 p.getProperty("password"));
              Statement stmt = con.createStatement();
              ResultSet rs = stmt.executeQuery(query)) {
@@ -64,7 +65,7 @@ public class Repository {
         return result;
     }
 
-    public List<Färg> getAllaFärger() {
+    public List<Färg> getAllaFärg() {
         return executeQuery("SELECT * FROM färg", rs -> {
             try {
                 return new Färg(rs.getInt("id"), rs.getString("färg"));
@@ -75,198 +76,89 @@ public class Repository {
     }
 
     public List<Storlek> getAllaStorlekar() {
-        List<Storlek> allaStorlekar = new ArrayList<>();
-
-        try (Connection con = DriverManager.getConnection(
-                p.getProperty("connectionString"),
-                p.getProperty("name"),
-                p.getProperty("password"));
-             Statement stmt = con.createStatement();
-             ResultSet rs = stmt.executeQuery("select * from storlek")) {
-
-            while (rs.next()) {
-
-                int id = rs.getInt("id");
-                String storlek = rs.getString("storlek");
-                allaStorlekar.add(new Storlek(id, storlek));
+        return executeQuery("select * from storlek", rs -> {
+            try {
+                return new Storlek(rs.getInt("id"), rs.getString("storlek"));
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return allaStorlekar;
+        });
     }
 
     public List<Märke> getAllaMärke() {
-        List<Märke> allaMärken = new ArrayList<>();
-
-        try (Connection con = DriverManager.getConnection(
-                p.getProperty("connectionString"),
-                p.getProperty("name"),
-                p.getProperty("password"));
-             Statement stmt = con.createStatement();
-             ResultSet rs = stmt.executeQuery("select * from märke")) {
-
-            while (rs.next()) {
-
-                int id = rs.getInt("id");
-                String märke = rs.getString("märke");
-                allaMärken.add(new Märke(id, märke));
+        return executeQuery("select * from märke", rs -> {
+            try {
+                return new Märke(rs.getInt("id"), rs.getString("märke"));
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return allaMärken;
+        });
     }
 
     public List<Model> getAllaModel() {
-        List<Model> allaModel = new ArrayList<>();
-
-        try (Connection con = DriverManager.getConnection(
-                p.getProperty("connectionString"),
-                p.getProperty("name"),
-                p.getProperty("password"));
-             Statement stmt = con.createStatement();
-             ResultSet rs = stmt.executeQuery("select * from model")) {
-
-            while (rs.next()) {
-
-                int id = rs.getInt("id");
-                String model = rs.getString("model");
-                allaModel.add(new Model(id, model));
+        return executeQuery("select * from model", rs -> {
+            try {
+                return new Model(rs.getInt("id"), rs.getString("model"));
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return allaModel;
+        });
     }
 
     public List<Kund> getAllaKunder() {
-        List<Kund> allaKunder = new ArrayList<>();
-
-        try (Connection con = DriverManager.getConnection(
-                p.getProperty("connectionString"),
-                p.getProperty("name"),
-                p.getProperty("password"));
-             Statement stmt = con.createStatement();
-             ResultSet rs = stmt.executeQuery("select * from kund")) {
-
-            while (rs.next()) {
-
-                int id = rs.getInt("id");
-                String email = rs.getString("email");
-                String namn = rs.getString("namn");
-                String adress = rs.getString("adress");
-                String password = rs.getString("password");
-                String skapad = rs.getString("skapad");
-                String ändrad = rs.getString("ändrad");
-                allaKunder.add(new Kund(id, email, namn, adress, password, skapad, ändrad));
+        return executeQuery("select * from kund", rs -> {
+            try {
+                return new Kund(rs.getInt("id"), rs.getString("email"),
+                        rs.getString("namn"), rs.getString("adress"),
+                        rs.getString("password"), rs.getString("skapad"),
+                        rs.getString("ändrad"));
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return allaKunder;
+        });
     }
 
     public List<Kategori> getAllaKategori() {
-        List<Kategori> allaKategori = new ArrayList<>();
-
-        try (Connection con = DriverManager.getConnection(
-                p.getProperty("connectionString"),
-                p.getProperty("name"),
-                p.getProperty("password"));
-             Statement stmt = con.createStatement();
-             ResultSet rs = stmt.executeQuery("select * from kategori")) {
-
-            while (rs.next()) {
-
-                int id = rs.getInt("id");
-                String kategori = rs.getString("kategori");
-                allaKategori.add(new Kategori(id, kategori));
+        return executeQuery(" select * from kategori", rs -> {
+            try {
+                return new Kategori(rs.getInt("id"), rs.getString("kategori"));
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return allaKategori;
-    }
-
-    public List<Färg> getAllaFärg() {
-        List<Färg> allaFärg = new ArrayList<>();
-
-        try (Connection con = DriverManager.getConnection(
-                p.getProperty("connectionString"),
-                p.getProperty("name"),
-                p.getProperty("password"));
-             Statement stmt = con.createStatement();
-             ResultSet rs = stmt.executeQuery("select * from färg")) {
-
-            while (rs.next()) {
-
-                int id = rs.getInt("id");
-                String färg = rs.getString("färg");
-                allaFärg.add(new Färg(id, färg));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return allaFärg;
+        });
     }
 
     public List<Beställning> getAllaBeställning() {
-        List<Beställning> allaBeställning = new ArrayList<>();
+        return executeQuery("SELECT beställning.*, kund.* FROM beställning JOIN kund ON beställning.kundId = kund.id",
+                rs -> {
+                    try {
+                        Kund kund = null;
+                        try {
+                            kund = new Kund(rs.getInt("kund.id"), rs.getString("kund.email"),
+                                    rs.getString("kund.namn"), rs.getString("kund.adress"),
+                                    rs.getString("kund.password"), rs.getString("kund.skapad"),
+                                    rs.getString("kund.ändrad"));
+                            return new Beställning(rs.getInt("beställning.id"), kund, rs.getInt("beställning.totalpris"),
+                                    rs.getString("beställning.skapad"), rs.getString("beställning.ändrad"));
+                        } catch (SQLException e) {
+                            throw new RuntimeException(e);
+                        }
 
-        try (Connection con = DriverManager.getConnection(
-                p.getProperty("connectionString"),
-                p.getProperty("name"),
-                p.getProperty("password"));
-             Statement stmt = con.createStatement();
-             ResultSet rs = stmt.executeQuery("select * from beställning")) {
-
-            //Prova att hämta kund där beställning.kundId == kund.ID ocskå på en gång.
-
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                int kundId = rs.getInt("kundId");
-                int totalPris = rs.getInt("totalPris");
-                String skapad = rs.getString("skapad");
-                String ändrad = rs.getString("ändrad");
-
-                // Retrieve the Kund object using the kundId
-                Kund kund = getKundById(kundId);
-
-                // Create a new Beställning object
-                Beställning beställning = new Beställning(id, kund, totalPris, skapad, ändrad);
-
-                // Add the Beställning object to the allaBeställning list
-                allaBeställning.add(beställning);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return allaBeställning;
+                    } catch (RuntimeException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
     }
-    public Kund getKundById(int id) {
-        Kund kund = null;
-        try (Connection con = DriverManager.getConnection(
-                p.getProperty("connectionString"),
-                p.getProperty("name"),
-                p.getProperty("password"));
-             PreparedStatement stmt = con.prepareStatement("SELECT * FROM kund WHERE id = ?")) {
-            stmt.setInt(1, id);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                int id = rs .getInt("id");
-                String email = rs.getString("email");
-                String namn = rs.getString("namn");
-                String adress = rs.getString("adress");
-                String password = rs.getString("password");
-                String skapad = rs.getString("skapad");
-                String ändrad = rs.getString("ändrad");
-                kund = new Kund(id, email, namn, adress, password, skapad, ändrad);
+
+    public List<Pris> getAllaPris(){
+        return executeQuery("Select pris.*, model.*, märke.* FROM pris JOIN model ON pris.modelId = model.id" +
+                "JOIN märke ON pris.märkeId = märke.id",rs -> {
+            try {
+
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return kund;
+        })
+
     }
+
 }
 

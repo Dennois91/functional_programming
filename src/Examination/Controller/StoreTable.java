@@ -34,7 +34,7 @@ public class StoreTable extends JFrame {
                 throw new RuntimeException(e);
             }
         });
-
+        System.out.println(r.testBeställning());
         dropDownMenu.addActionListener(l -> showReports(dropDownMenu));
     }
 

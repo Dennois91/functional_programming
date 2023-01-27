@@ -2,10 +2,9 @@ package Examination.Model;
 
 public class Storlek {
     public int id;
-    public String storlek;
+    public int storlek;
 
-    public Storlek(int id, String storlek) {
-        this.id = id;
-        this.storlek = storlek;
+
+    public Storlek(int id, int storlek) {
     }
 }

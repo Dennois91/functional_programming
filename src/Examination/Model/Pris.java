@@ -2,10 +2,12 @@ package Examination.Model;
 
 public class Pris {
     public int id;
-    public Pris prisId;
-    public Model modelId;
-    public Märke märkeId;
+    public int pris;
+    public Model model;
+    public Märke märke;
     public String skapad;
     public String ändrad;
 
+    public Pris(int id, int pris, Model model, Märke märke, String skapad, String ändrad) {
+    }
 }

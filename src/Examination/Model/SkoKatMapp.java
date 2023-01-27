@@ -2,6 +2,9 @@ package Examination.Model;
 
 public class SkoKatMapp {
     public int id;
-    public Sko skoId;
-    public Kategori kategoriId;
+    public Sko sko;
+    public Kategori kategori;
+
+    public SkoKatMapp(int id, Sko sko, Kategori kategori) {
+    }
 }

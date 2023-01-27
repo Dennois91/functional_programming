@@ -1,7 +1,5 @@
 package Examination.Model;
 
-import Assignments_JDBC_1_to_6.repository.Elf;
-
 import javax.swing.*;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -78,7 +76,7 @@ public class Repository {
     public List<Storlek> getAllaStorlekar() {
         return executeQuery("select * from storlek", rs -> {
             try {
-                return new Storlek(rs.getInt("id"), rs.getString("storlek"));
+                return new Storlek(rs.getInt("id"), rs.getInt("storlek"));
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -119,7 +117,7 @@ public class Repository {
     }
 
     public List<Kategori> getAllaKategori() {
-        return executeQuery(" select * from kategori", rs -> {
+        return executeQuery("select * from kategori", rs -> {
             try {
                 return new Kategori(rs.getInt("id"), rs.getString("kategori"));
             } catch (SQLException e) {
@@ -129,7 +127,10 @@ public class Repository {
     }
 
     public List<Beställning> getAllaBeställning() {
-        return executeQuery("SELECT beställning.*, kund.* FROM beställning JOIN kund ON beställning.kundId = kund.id",
+        return executeQuery("""
+                        SELECT beställning.*, kund.*
+                        FROM beställning
+                                 JOIN kund ON beställning.kundId = kund.idd""",
                 rs -> {
                     try {
                         Kund kund = null;
@@ -150,15 +151,100 @@ public class Repository {
                 });
     }
 
-    public List<Pris> getAllaPris(){
-        return executeQuery("Select pris.*, model.*, märke.* FROM pris JOIN model ON pris.modelId = model.id" +
-                "JOIN märke ON pris.märkeId = märke.id",rs -> {
+    public List<Pris> getAllaPris() {
+        return executeQuery("""
+                Select pris.*, model.*, märke.*
+                FROM pris
+                         JOIN model ON pris.modelId = model.id
+                         JOIN märke ON pris.märkeId = märke.id""", rs -> {
             try {
+                Model model = new Model(rs.getInt("model.id"), rs.getString("model.model"));
+                Märke märke = new Märke(rs.getInt("märke.id"), rs.getString("märke.märke"));
 
+                return new Pris(rs.getInt("pris.id"), rs.getInt("pris.pris"), model, märke,
+                        rs.getString("pris.skapad"), rs.getString("pris.ändrad"));
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
-        })
-
+        });
     }
 
+    public List<Kundvagn> getAllaKundvagn() {
+        return executeQuery("""
+                select kundvagn.*,sko.*,beställning.*,märke.*,model.*,storlek.*,färg.*,pris.*,kund.*
+                FROM kundvagn
+                JOIN sko ON kundvagn.skoId = sko.id
+                JOIN beställning ON kundvagn.beställningId = beställning.id
+                JOIN märke ON sko.märkeId = märke.id
+                JOIN model ON sko.modelId = model.id
+                JOIN storlek ON sko.storlekId = storlek.id
+                JOIN färg ON sko.färgId = färg.id
+                JOIN pris ON sko.prisId = pris.id
+                JOIN kund ON beställning.kundId = kund.id""", rs -> {
+            try {
+                Märke märke = new Märke(rs.getInt("märke.id"), rs.getString("märke.märke"));
+                Model model = new Model(rs.getInt("model.id"), rs.getString("model.model"));
+                Pris pris = new Pris(rs.getInt("pris.id"), rs.getInt("pris.pris"), model, märke,
+                        rs.getString("pris.skapad"), rs.getString("pris.ändrad"));
+                Färg färg = new Färg(rs.getInt("färg.id"), rs.getString("färg.färg"));
+                Storlek storlek = new Storlek(rs.getInt("storlek.id"), rs.getInt("storlek.storlek"));
+                Sko sko = new Sko(rs.getInt("sko.id"), märke, model, storlek, färg, pris, rs.getInt("sko.lagerSaldo"),
+                        rs.getString("sko.skapad"), rs.getString("sko.ändrad"));
+                Beställning beställning = new Beställning(rs.getInt("beställning.id"), new Kund(
+                        rs.getInt("kund.id"), rs.getString("kund.email"), rs.getString("kund.namn"),
+                        rs.getString("kund.adress"), rs.getString("kund.password"), rs.getString(
+                        "kund.skapad"), rs.getString("kund.ändrad")), rs.getInt("beställning.totalPris"),
+                        rs.getString("beställning.skapad"), rs.getString("beställning.ändrad"));
+                return new Kundvagn(rs.getInt("id"), rs.getInt("antal"), sko, beställning);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    public List<Sko> getAllaSko() {
+        return executeQuery("SELECT sko.*,märke.*,model.*,storlek.*,färg.*,pris.*\n" +
+                "FROM sko\n" +
+                "JOIN märke ON sko.märkeId = märke.id\n" +
+                "JOIN model ON sko.modelId = model.id\n" +
+                "JOIN storlek ON sko.storlekId = storlek.id\n" +
+                "JOIN färg ON sko.färgId = färg.id\n" +
+                "JOIN pris ON sko.prisId = pris.id", rs -> {
+            try {
+                Märke märke = new Märke(rs.getInt("märke.id"), rs.getString("märke.märke"));
+                Model model = new Model(rs.getInt("model.id"), rs.getString("model.model"));
+                Färg färg = new Färg(rs.getInt("färg.id"), rs.getString("färg.färg"));
+                Pris pris = new Pris(rs.getInt("pris.id"), rs.getInt("pris.pris"), model, märke,
+                        rs.getString("pris.skapad"), rs.getString("pris.ändrad"));
+                Storlek storlek = new Storlek(rs.getInt("storlek.id"), rs.getInt("storlek.storlek"));
+                return new Sko(rs.getInt("sko.id"), märke, model, storlek, färg, pris, rs.getInt("sko.lagerSaldo"),
+                        rs.getString("sko.skapad"), rs.getString("sko.ändrad"));
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+    public List<SkoKatMapp> getAllaSkoKatMapp(){
+        return executeQuery("SELECT skokatmapp.*,sko.*,kategori.*\n" +
+                "FROM skokatmapp\n" +
+                "JOIN sko ON skokatmapp.skoId = sko.id\n" +
+                "JOIN kategori ON skokatmapp.kategoriId = kategori.id", rs ->{
+            try {
+                Märke märke = new Märke(rs.getInt("märke.id"), rs.getString("märke.märke"));
+                Model model = new Model(rs.getInt("model.id"), rs.getString("model.model"));
+                Pris pris = new Pris(rs.getInt("pris.id"), rs.getInt("pris.pris"), model, märke,
+                        rs.getString("pris.skapad"), rs.getString("pris.ändrad"));
+                Färg färg = new Färg(rs.getInt("färg.id"), rs.getString("färg.färg"));
+                Storlek storlek = new Storlek(rs.getInt("storlek.id"), rs.getInt("storlek.storlek"));
+                Sko sko = new Sko(rs.getInt("sko.id"), märke, model, storlek, färg, pris, rs.getInt("sko.lagerSaldo"),
+                        rs.getString("sko.skapad"), rs.getString("sko.ändrad"));
+                Kategori kategori = new Kategori(rs.getInt("kategori.id"),rs.getString("kategori.kategori"));
+                return new SkoKatMapp(rs.getInt("skokatmapp.id"),sko,kategori);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+
+        });
+    }
 }
 

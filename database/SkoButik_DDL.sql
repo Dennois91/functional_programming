@@ -382,6 +382,6 @@ CREATE PROCEDURE getInventory()
     join pris on sko.prisId = pris.id;
     END;
 DELIMITER ;
--- CALL AddToCart(5, 0, 24);
+CALL AddToCart(5, 0, 24);
 -- CALL deleteKund(5);
 -- CALL getInventory();

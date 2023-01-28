@@ -10,5 +10,12 @@ public class Kund {
     public String ändrad;
 
     public Kund(int id, String email, String namn, String adress, String password, String skapad, String ändrad) {
+        this.id = id;
+        this.email = email;
+        this.namn=namn;
+        this.password = password;
+        this.adress=adress;
+        this.skapad=skapad;
+        this.ändrad=ändrad;
     }
 }

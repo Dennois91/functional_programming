@@ -5,5 +5,7 @@ public class Färg {
     public String färg;
 
     public Färg(int id, String färg) {
+        this.id = id;
+        this.färg = färg;
     }
 }

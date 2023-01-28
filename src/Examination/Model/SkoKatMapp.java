@@ -6,5 +6,8 @@ public class SkoKatMapp {
     public Kategori kategori;
 
     public SkoKatMapp(int id, Sko sko, Kategori kategori) {
+        this.id=id;
+        this.sko=sko;
+        this.kategori=kategori;
     }
 }

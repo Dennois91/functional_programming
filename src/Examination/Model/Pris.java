@@ -9,5 +9,11 @@ public class Pris {
     public String ändrad;
 
     public Pris(int id, int pris, Model model, Märke märke, String skapad, String ändrad) {
+        this.id=id;
+        this.pris=pris;
+        this.märke=märke;
+        this.model=model;
+        this.skapad=skapad;
+        this.ändrad=ändrad;
     }
 }

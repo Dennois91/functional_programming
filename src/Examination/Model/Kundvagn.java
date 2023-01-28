@@ -7,5 +7,9 @@ public class Kundvagn {
     public Beställning beställning;
 
     public Kundvagn(int id, int antal, Sko sko, Beställning beställning) {
+        this.id=id;
+        this.antal=antal;
+        this.sko=sko;
+        this.beställning=beställning;
     }
 }

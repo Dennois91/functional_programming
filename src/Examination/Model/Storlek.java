@@ -6,5 +6,7 @@ public class Storlek {
 
 
     public Storlek(int id, int storlek) {
+        this.id=id;
+        this.storlek=storlek;
     }
 }

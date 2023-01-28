@@ -16,27 +16,6 @@ public class Repository {
         loadProperties();
     }
 
-    public DefaultListModel<String> displayInventory() {
-        DefaultListModel<String> inventoryListModel = new DefaultListModel<>();
-        try (Connection con = DriverManager.getConnection(
-                p.getProperty("connectionString"),
-                p.getProperty("username"),
-                p.getProperty("password"));
-
-             CallableStatement stm = con.prepareCall("CALL getInventory()")) {
-            ResultSet rs = stm.executeQuery();
-            while (rs.next()) {
-                //Hämtar data ifrån ResultSet och add till inventoryListModel
-                inventoryListModel.addElement(rs.getString("märke") + " - " + rs.getString("model")
-                        + " - " + rs.getString("färg") + " - " + rs.getString("storlek")
-                        + " - Pris: " + rs.getString("pris") + " - Saldo: " + rs.getString("lagerSaldo"));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return inventoryListModel;
-    }
-
     private void loadProperties() {
         try {
             p.load(new FileInputStream("resources/settings.properties"));
@@ -66,7 +45,8 @@ public class Repository {
     public List<Färg> getAllaFärg() {
         return executeQuery("SELECT * FROM färg", rs -> {
             try {
-                return new Färg(rs.getInt("id"), rs.getString("färg"));
+                return new Färg(rs.getInt("färg.id"), rs.getString("färg.färg"));
+
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -203,13 +183,14 @@ public class Repository {
     }
 
     public List<Sko> getAllaSko() {
-        return executeQuery("SELECT sko.*,märke.*,model.*,storlek.*,färg.*,pris.*\n" +
-                "FROM sko\n" +
-                "JOIN märke ON sko.märkeId = märke.id\n" +
-                "JOIN model ON sko.modelId = model.id\n" +
-                "JOIN storlek ON sko.storlekId = storlek.id\n" +
-                "JOIN färg ON sko.färgId = färg.id\n" +
-                "JOIN pris ON sko.prisId = pris.id", rs -> {
+        return executeQuery("""
+                SELECT sko.*,märke.*,model.*,storlek.*,färg.*,pris.*
+                FROM sko
+                JOIN märke ON sko.märkeId = märke.id
+                JOIN model ON sko.modelId = model.id
+                JOIN storlek ON sko.storlekId = storlek.id
+                JOIN färg ON sko.färgId = färg.id
+                JOIN pris ON sko.prisId = pris.id""", rs -> {
             try {
                 Märke märke = new Märke(rs.getInt("märke.id"), rs.getString("märke.märke"));
                 Model model = new Model(rs.getInt("model.id"), rs.getString("model.model"));
@@ -225,10 +206,11 @@ public class Repository {
         });
     }
     public List<SkoKatMapp> getAllaSkoKatMapp(){
-        return executeQuery("SELECT skokatmapp.*,sko.*,kategori.*\n" +
-                "FROM skokatmapp\n" +
-                "JOIN sko ON skokatmapp.skoId = sko.id\n" +
-                "JOIN kategori ON skokatmapp.kategoriId = kategori.id", rs ->{
+        return executeQuery("""
+                SELECT skokatmapp.*,sko.*,kategori.*
+                FROM skokatmapp
+                JOIN sko ON skokatmapp.skoId = sko.id
+                JOIN kategori ON skokatmapp.kategoriId = kategori.id""", rs ->{
             try {
                 Märke märke = new Märke(rs.getInt("märke.id"), rs.getString("märke.märke"));
                 Model model = new Model(rs.getInt("model.id"), rs.getString("model.model"));
@@ -243,7 +225,6 @@ public class Repository {
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
-
         });
     }
 }

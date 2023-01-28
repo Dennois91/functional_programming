@@ -5,5 +5,7 @@ public class Märke {
     public String märke;
 
     public Märke(int id, String märke) {
+        this.id=id;
+        this.märke=märke;
     }
 }

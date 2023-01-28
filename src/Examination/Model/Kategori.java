@@ -5,5 +5,7 @@ public class Kategori {
     public String kategori;
 
     public Kategori(int id, String kategori) {
+        this.id=id;
+        this.kategori = kategori;
     }
 }

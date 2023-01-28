@@ -1,16 +1,21 @@
 package Examination.Controller;
 
+import Examination.Model.Kund;
+import Examination.Model.Repository;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 public class LogginTable extends JFrame implements ActionListener {
+    private final Repository r = new Repository();
     private JPanel loginPanel;
     private JButton loginBut;
-    private JPasswordField passwordField;
+    private JTextField passwordField;
     private JTextField usernameTextField;
+    final private List<Kund> kunder = r.getAllaKunder();
 
-    private boolean accesGranted = true;
 
     public LogginTable() {
         setContentPane(loginPanel);
@@ -22,9 +27,16 @@ public class LogginTable extends JFrame implements ActionListener {
 
 
         loginBut.addActionListener(l -> {
-            if (accesGranted) {
+            boolean matchFound = false;
+            for (Kund kund : kunder) {
+                if (kund.namn.equals(usernameTextField.getText()) && kund.password.equals(passwordField.getText())) {
+                    matchFound = true;
+                    break;
+                }
+            }
+            if (matchFound) {
                 dispose();
-                StoreTable storeTable = new StoreTable();
+                StoreTable storeTable = new StoreTable(usernameTextField.getText());
                 storeTable.showInventoryList();
                 revalidate();
                 repaint();
@@ -33,6 +45,7 @@ public class LogginTable extends JFrame implements ActionListener {
             }
         });
     }
+
 
     @Override
     public void actionPerformed(ActionEvent e) {

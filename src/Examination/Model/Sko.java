@@ -24,8 +24,24 @@ public class Sko {
     }
 
     public String getInventory() {
-        return märke.märke + " " + model.model + " " + färg.färg + " Storlek: " + storlek.storlek + " Saldo: " + (lagerSaldo);
+        return "Märke: " + märke.märke + " Model: " + model.model + " Färg: " + färg.färg + " Storlek: " + storlek.storlek + " Saldo: " + (lagerSaldo);
 
 
+    }
+
+    public String getModel() {
+        return this.model.model;
+    }
+
+    public String getFärg() {
+        return this.färg.färg;
+    }
+
+    public String getMärke() {
+        return this.märke.märke;
+    }
+
+    public String getStorlek() {
+        return String.valueOf(this.storlek.storlek);
     }
 }

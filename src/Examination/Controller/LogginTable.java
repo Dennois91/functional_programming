@@ -15,6 +15,7 @@ public class LogginTable extends JFrame implements ActionListener {
     private JTextField passwordField;
     private JTextField usernameTextField;
     final private List<Kund> kunder = r.getAllaKunder();
+    private Kund kund;
 
 
     public LogginTable() {
@@ -31,12 +32,14 @@ public class LogginTable extends JFrame implements ActionListener {
             for (Kund kund : kunder) {
                 if (kund.namn.equals(usernameTextField.getText()) && kund.password.equals(passwordField.getText())) {
                     matchFound = true;
+                    this.kund=kund;
+
                     break;
                 }
             }
             if (matchFound) {
                 dispose();
-                StoreTable storeTable = new StoreTable(usernameTextField.getText());
+                StoreTable storeTable = new StoreTable(kund);
                 storeTable.showInventoryList();
                 revalidate();
                 repaint();

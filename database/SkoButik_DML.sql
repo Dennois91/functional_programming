@@ -48,7 +48,7 @@ FROM beställning
 GROUP BY YEAR(skapad), MONTHNAME(skapad)
 ORDER BY totalFörsäljning DESC;
 
-CALL AddToCart(1, 10, 5);
+CALL AddToCart(1, 50, 19);
 
 CALL deleteKund(5);
 

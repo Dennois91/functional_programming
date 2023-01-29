@@ -24,6 +24,11 @@ public class Repository {
         }
     }
 
+    /* Högre ordningens funktion:
+    Funktionen utför en SQL query och returnerar resultat som en generisk lista
+    Vi tar in en query och en Function för att mappa resultat till nytt format
+     */
+
     private <T> List<T> executeQuery(String query, Function<ResultSet, T> mapper) {
         List<T> result = new ArrayList<>();
         try (Connection con = DriverManager.getConnection(
@@ -34,13 +39,32 @@ public class Repository {
              ResultSet rs = stmt.executeQuery(query)) {
 
             while (rs.next()) {
-                result.add(mapper.apply(rs));
-            }
+                result.add(mapper.apply(rs)); // tar varje rad i rs och använder en mapper på varje rad
+            }                                 // och lägger resultatet i listan result
         } catch (Exception e) {
             e.printStackTrace();
         }
         return result;
     }
+
+
+    public void callAddToCart(int kundId, int skoId,String kundName) {
+        try (Connection con = DriverManager.getConnection(
+                p.getProperty("connectionString"),
+                p.getProperty("username"),
+                p.getProperty("password"));
+
+             CallableStatement stm = con.prepareCall("CALL AddToCart(?,?,?)")) {
+            stm.setInt(1, kundId);
+            stm.setInt(2, Integer.MAX_VALUE);
+            stm.setInt(3, skoId);
+            stm.execute();
+            System.out.println("Ny order skapad för " + kundName);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
 
     public List<Färg> getAllaFärg() {
         return executeQuery("SELECT * FROM färg", rs -> {
@@ -205,12 +229,13 @@ public class Repository {
             }
         });
     }
-    public List<SkoKatMapp> getAllaSkoKatMapp(){
+
+    public List<SkoKatMapp> getAllaSkoKatMapp() {
         return executeQuery("""
                 SELECT skokatmapp.*,sko.*,kategori.*
                 FROM skokatmapp
                 JOIN sko ON skokatmapp.skoId = sko.id
-                JOIN kategori ON skokatmapp.kategoriId = kategori.id""", rs ->{
+                JOIN kategori ON skokatmapp.kategoriId = kategori.id""", rs -> {
             try {
                 Märke märke = new Märke(rs.getInt("märke.id"), rs.getString("märke.märke"));
                 Model model = new Model(rs.getInt("model.id"), rs.getString("model.model"));
@@ -220,8 +245,8 @@ public class Repository {
                 Storlek storlek = new Storlek(rs.getInt("storlek.id"), rs.getInt("storlek.storlek"));
                 Sko sko = new Sko(rs.getInt("sko.id"), märke, model, storlek, färg, pris, rs.getInt("sko.lagerSaldo"),
                         rs.getString("sko.skapad"), rs.getString("sko.ändrad"));
-                Kategori kategori = new Kategori(rs.getInt("kategori.id"),rs.getString("kategori.kategori"));
-                return new SkoKatMapp(rs.getInt("skokatmapp.id"),sko,kategori);
+                Kategori kategori = new Kategori(rs.getInt("kategori.id"), rs.getString("kategori.kategori"));
+                return new SkoKatMapp(rs.getInt("skokatmapp.id"), sko, kategori);
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }

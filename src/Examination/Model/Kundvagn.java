@@ -3,6 +3,15 @@ package Examination.Model;
 public class Kundvagn {
     public int id;
     public int antal;
+
+    public Sko getSko() {
+        return sko;
+    }
+
+    public int getAntal() {
+        return antal;
+    }
+
     public Sko sko;
     public Beställning beställning;
 

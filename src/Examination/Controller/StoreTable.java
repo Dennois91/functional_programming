@@ -4,6 +4,7 @@ import Examination.Model.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.List;
@@ -22,7 +23,7 @@ public class StoreTable extends JFrame {
     private JButton removeFromCartB;
     private JLabel userNameLabel;
     private final Repository r = new Repository();
-    private int dropDownMenuIndex;
+
 
     public StoreTable(Kund kund) throws HeadlessException {
         userNameLabel.setText("Logged in as: " + kund.namn);
@@ -55,20 +56,36 @@ public class StoreTable extends JFrame {
                 throw new RuntimeException(e);
             }
         });
-        ;
+
         dropDownMenu.addActionListener(l -> showReports(dropDownMenu));
     }
 
     public void showReports(JComboBox dropDownMenu) {
         switch (dropDownMenu.getSelectedIndex()) {
             case 0 -> showInventoryList();
-            case 1 -> showTopList();
+            case 1 -> System.out.println("report 2");
             case 2 -> System.out.println("report 3");
             case 3 -> System.out.println("report 4");
-            case 4 -> System.out.println("report 5");
+            case 4 -> showTopList();
             default -> JOptionPane.showMessageDialog(null, "Unexpected error from reports",
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    public void showTopList() {
+        List<Kundvagn> kundvagnList = r.getAllaKundvagn();
+
+        Map<Integer, Integer> skoCountMap = kundvagnList.stream()
+                .collect(Collectors.toMap(kv -> kv.sko.id, Kundvagn::getAntal, Integer::sum));
+
+        List<TopList> topList = skoCountMap.entrySet().stream()
+                .map(entry -> new TopList(entry.getKey(), entry.getValue()))
+                .sorted(Comparator.comparingInt(TopList::getCount).reversed())
+                .collect(Collectors.toList());
+
+        DefaultListModel<String> topListString = new DefaultListModel<>();
+        topList.forEach(tl -> topListString.addElement(findSkoById(tl.getSkoId()) + " antal sålda: " + tl.getCount()));
+        list1.setModel(topListString);
     }
 
     public void showInventoryList() {
@@ -76,41 +93,19 @@ public class StoreTable extends JFrame {
         DefaultListModel<String> listModel = new DefaultListModel<>();
         skoList.stream().map(Sko::getInventory).forEach(listModel::addElement);
         list1.setModel(listModel);
-
     }
-
-    public void showTopList() {
-        final List<Kundvagn> kundvagnList = r.getAllaKundvagn();
-        Map<Integer, Integer> skoCountMap = new HashMap<>();
-        for (Kundvagn kundvagn : kundvagnList) {
-            Sko skoObject = kundvagn.sko;
-            int skoId = skoObject.id;
-            int antal = kundvagn.antal;
-            if (skoCountMap.containsKey(skoId)) {
-                skoCountMap.put(skoId, skoCountMap.get(skoId) + antal);
-            } else {
-                skoCountMap.put(skoId, antal);
-            }
-        }
-        List<TopList> topList = new ArrayList<>();
-        for (Map.Entry<Integer, Integer> entry : skoCountMap.entrySet()) {
-            topList.add(new TopList(entry.getKey(), entry.getValue()));
-        }
-        topList.sort(Comparator.comparingInt(TopList::getCount).reversed());
-
-        for (TopList topList1 : topList){
-            System.out.println(topList1.getSkoId() + " " + topList1.getCount());
-        }
-    }
-
-
-
 
     public void searchQuery() throws SQLException {
         String searchQuery = searchField.getText();
         String[] searchTerms = searchQuery.split(" ");
         String sql = "SELECT * FROM products WHERE ";
 
+    }
+
+    public String findSkoById(int skoId) {
+        final List<Sko> skoList = r.getAllaSko();
+        List<String> topList = new ArrayList<>();
+        return skoList.stream().filter(sko -> sko.getId() == skoId).map(Sko::getSko).findFirst().orElse("");
     }
 
     public Sko findSkoId(List<String> sko) {

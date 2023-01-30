@@ -11,6 +11,10 @@ public class Sko {
     public String skapad;
     public String ändrad;
 
+    public int getId() {
+        return id;
+    }
+
     public Sko(int id, Märke märke, Model model, Storlek storlek, Färg färg, Pris pris, int lagerSaldo, String skapad, String ändrad) {
         this.id = id;
         this.märke = märke;
@@ -25,8 +29,10 @@ public class Sko {
 
     public String getInventory() {
         return "Märke: " + märke.märke + " Model: " + model.model + " Färg: " + färg.färg + " Storlek: " + storlek.storlek + " Saldo: " + (lagerSaldo);
+    }
 
-
+    public String getSko() {
+        return "Märke: " + märke.märke + " Model: " + model.model + " Färg: " + färg.färg + " Storlek: " + storlek.storlek;
     }
 
     public String getModel() {

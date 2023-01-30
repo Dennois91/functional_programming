@@ -11,13 +11,15 @@ public class Main {
     public Main() {
         util.createBooks();
 
-        util.getAllBooksByAuthor("J.R.R. Tolkien", books).forEach(book -> System.out.println(book.getTitel()));
-        util.getAllBooksByColour("Yellow", books).forEach(book -> System.out.println(book.getTitel()));
-        System.out.println(util.countBooksByOwner("Brian Wilson",books));
+        //   util.getAllBooksByAuthor("J.R.R. Tolkien", books).forEach(book -> System.out.println(book.getTitel()));
+        //   util.getAllBooksByColour("Yellow", books).forEach(book -> System.out.println(book.getTitel()));
+        //   System.out.println(util.countBooksByOwner("Brian Wilson",books));
 
-        System.out.println(util.getAllTitelsOfBooks(books));
-        System.out.println(util.getAllAuthors(books));
-        System.out.println(util.getAllBookTitelsOwnedBy(books,"Brian Wilson"));
+        //   System.out.println(util.getAllTitelsOfBooks(books));
+        //   System.out.println(util.getAllAuthors(books));
+        //   System.out.println(util.getAllBookTitelsOwnedBy(books,"Brian Wilson"));
+
+        //   util.getTitelsOfAllBooksInListOfBooks(util.listOfBookLists);
 
 
     }

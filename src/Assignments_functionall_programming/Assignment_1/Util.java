@@ -1,11 +1,15 @@
 package Assignments_functionall_programming.Assignment_1;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class Util {
     List<Book> books = new ArrayList<>();
+    List<Book> booksByTolkien = new ArrayList<>();
+    List<Book> booksByRowinlg = new ArrayList<>();
+    List<List<Book>> listOfBookLists = new ArrayList<>();
 
     public void createBooks() {
         books.add(new Book("LOTRO", "J.R.R. Tolkien", "Fantasy", "Green", 5, "Brian Wilson", false));
@@ -20,12 +24,23 @@ public class Util {
         books.add(new Book("The Art of War", "Sun Tzu", "Strategy", "Yellow", 5, "Jessica Thompson", true));
         books.add(new Book("The Divine Comedy", "Dante Alighieri", "Poetry", "White", 3, "Brian Wilson", true));
         books.add(new Book("The Picture of Dorian Gray", "Oscar Wilde", "Novel", "Silver", 4, "Emily Johnson", true));
+
+        booksByTolkien.add(books.get(0));
+        booksByTolkien.add(books.get(6));
+        booksByRowinlg.add(books.get(1));
+        booksByRowinlg.add(books.get(3));
+        listOfBookLists.add(booksByTolkien);
+        listOfBookLists.add(booksByRowinlg);
     }
 // En funktion som returnerar en lista på alla titlar som dina böcker har
     //En funktion som returnerar en lista på alla författare som dina böcker har
     //o Vi vill inte ha några dubletter i listan
     //En funktion som listar alla titlar, men bara på böcker som tillhör dig
+    //En funktion som returnerar en lista på alla titlar av böcker som finns i listorna i din boklist
 
+    public void getTitelsOfAllBooksInListOfBooks(List<List<Book>> ListOfListOfBooks){
+        listOfBookLists.stream().flatMap(Collection::stream).forEach(book -> System.out.println(book.getTitel()));
+    }
     public List<String> getAllBookTitelsOwnedBy(List<Book> list, String owner){
         return list.stream().filter(Book -> Book.getOwner().equalsIgnoreCase(owner)).
                 map(Book::getTitel).collect(Collectors.toList());

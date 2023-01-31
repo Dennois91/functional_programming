@@ -1,8 +1,7 @@
 package Assignments_functionall_programming.Assignment_1;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.text.Collator;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Util {
@@ -32,29 +31,77 @@ public class Util {
         listOfBookLists.add(booksByTolkien);
         listOfBookLists.add(booksByRowinlg);
     }
-// En funktion som returnerar en lista på alla titlar som dina böcker har
-    //En funktion som returnerar en lista på alla författare som dina böcker har
-    //o Vi vill inte ha några dubletter i listan
-    //En funktion som listar alla titlar, men bara på böcker som tillhör dig
-    //En funktion som returnerar en lista på alla titlar av böcker som finns i listorna i din boklist
 
-    public void getTitelsOfAllBooksInListOfBooks(List<List<Book>> ListOfListOfBooks){
-        listOfBookLists.stream().flatMap(Collection::stream).forEach(book -> System.out.println(book.getTitel()));
+    public void printAllBooksTitelsInOneString(List<Book> books) {
+        System.out.println(books.stream().
+                map(Book::getTitel).
+                collect(Collectors.joining(", ", "Start of string:  ", " End of string")));
     }
-    public List<String> getAllBookTitelsOwnedBy(List<Book> list, String owner){
+
+    public void printBooksByRating(List<Book> books) {
+        books.stream().sorted(Comparator.comparingInt(Book::getRating)).
+                forEach(a -> System.out.println(a.getTitel()));
+    }
+
+    public void printBooksInTitelOrder(List<Book> books) {
+        Collator collator = Collator.getInstance(new Locale("sv", "SV"));
+        books.stream().map(Book::getTitel).sorted(collator).
+                forEach(System.out::println);
+    }
+
+    public String concatAllTitelsToString(List<Book> books) {
+        return books.isEmpty() ? "No books in list" : books.stream().
+                map(Book::getTitel).
+                reduce((str, elem) -> str + " ," + elem).
+                orElse("");
+    }
+
+    public float getMedianOfRaitings(List<Book> books) {
+        return books.isEmpty() ? 0f : (float) books.stream().
+                map(Book::getRating).
+                reduce(0, Integer::sum) / books.size();
+    }
+
+    public double getMedianOfRaitingsTwo(List<Book> books) {
+        return books.isEmpty() ? 0.0 : books.stream().
+                map(Book::getRating).
+                mapToInt(e -> e).
+                average().
+                orElse(0.0);
+    }
+
+    public int getRedBooksOwnedBy(List<Book> books, String ownerName) {
+        return (int) books.stream().
+                filter(book -> book.getOwner().equals(ownerName)).
+                filter(book -> book.getColour().equals("Red")).
+                count();
+    }
+
+    public void getTitelsOfAllBooksInListOfBooks(List<List<Book>> ListOfListOfBooks) {
+        listOfBookLists.stream().flatMap(Collection::stream).
+                forEach(book -> System.out.println(book.getTitel()));
+    }
+
+    public List<String> getAllBookTitelsOwnedBy(List<Book> list, String owner) {
         return list.stream().filter(Book -> Book.getOwner().equalsIgnoreCase(owner)).
-                map(Book::getTitel).collect(Collectors.toList());
+                map(Book::getTitel).
+                collect(Collectors.toList());
     }
+
     public List<String> getAllAuthors(List<Book> list) {
-        return list.stream().map(Book::getAuthor).distinct().toList();
+        return list.stream().map(Book::getAuthor).
+                distinct().
+                toList();
     }
 
     public List<String> getAllTitelsOfBooks(List<Book> list) {
-        return list.stream().map(Book::getTitel).toList();
+        return list.stream().map(Book::getTitel).
+                toList();
     }
 
     public long countBooksByOwner(String owner, List<Book> list) {
-        return list.stream().filter(s -> s.getOwner().equalsIgnoreCase(owner)).count();
+        return list.stream().filter(s -> s.getOwner().equalsIgnoreCase(owner)).
+                count();
     }
 
     public List<Book> getAllBooksByColour(String colour, List<Book> list) {
@@ -63,8 +110,9 @@ public class Util {
     }
 
     public List<Book> getAllBooksByAuthor(String author, List<Book> list) {
-        return list.stream().filter(s -> s.getAuthor().equalsIgnoreCase(author))
-                .toList();
+        return list.stream().
+                filter(s -> s.getAuthor().equalsIgnoreCase(author)).
+                toList();
     }
 
 
@@ -80,4 +128,32 @@ public class Util {
 • Betyg (int)
 • Ägare
 • Fakta eller fiction (boolean)
- */
+
+  Skriv följande funktioner som alla ska använda sig av primitiva variabler eller anymatch:
+• En funktion som räknar ut medelvärdet av dina betyg
+• En funktion som räknar antalet böcker i listan som tillhör dig OCH är röda (välj nån färg och
+ägare som du får träffar på)
+• Skriv en funktion som ger sant om det finns några böcker av Tim Ferriss (eller annan valfri
+författare) i din lista
+
+
+  Skriv följande funktioner som alla ska använda lambda-metoden reduce:
+• En funktion som räknar ut medelvärdet av dina betyg
+• En funktion som slår ihop alla titlar till en jättelång sträng. Det ska finnas ”, ”mellan varje titel
+
+En funktion som returnerar en lista på alla titlar som dina böcker har
+En funktion som returnerar en lista på alla författare som dina böcker har
+Vi vill inte ha några dubletter i listan
+En funktion som listar alla titlar, men bara på böcker som tillhör dig
+En funktion som returnerar en lista på alla titlar av böcker som finns i listorna i din boklist
+
+Skriv följande funktioner som alla ska använda sig av sortering:
+• En funktion som skriver ut böckerna i rating-ordning
+• En funktion som skriver ut titlarna i (svensk) bokstavsordning
+
+    Skriv följande funktioner som alla ska använda sig av joining:
+    • En funktion som gör en jättelång sträng av alla titlarna, med ”, ”mellan varje bok, men inte
+    före första eller efter sista titeln
+
+
+*/

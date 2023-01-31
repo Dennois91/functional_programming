@@ -1,11 +1,9 @@
 package Examination.Controller;
 
 public class Main {
-    //StoreTable storeFront = new StoreTable();
-    LogginTable logginTable = new LogginTable();
-    private boolean LogedIn = false;
-    public Main() {
 
+    public Main() {
+        new LoginController();
     }
 
     public static void main(String[] args) {

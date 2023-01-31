@@ -1,11 +1,10 @@
 package Examination.Model;
 
+import javax.swing.*;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 import java.util.function.Function;
 
 public class Repository {
@@ -24,11 +23,11 @@ public class Repository {
     }
 
     /* Högre ordningens funktion:
-    Funktionen utför en SQL query och returnerar resultat som en generisk lista
-    Vi tar in en query och en Function för att mappa resultat till nytt format
+    Funktionen tar en SQL query och ett ResultSet och returnerar resultat som en generisk lista
+    Vi tar in en query och ett resultSet och mappar resultat till nytt format av generisk typ.
      */
 
-    private <T> List<T> executeQuery(String query, Function<ResultSet, T> mapper) {
+    private <T> List<T> executeQuery(String query, Function<ResultSet, T> mapp) {
         List<T> result = new ArrayList<>();
         try (Connection con = DriverManager.getConnection(
                 p.getProperty("connectionString"),
@@ -38,16 +37,67 @@ public class Repository {
              ResultSet rs = stmt.executeQuery(query)) {
 
             while (rs.next()) {
-                result.add(mapper.apply(rs)); // tar varje rad i rs och använder en mapper på varje rad
-            }                                 // och lägger resultatet i listan result
+                result.add(mapp.apply(rs)); //tar varje rad i rs och mappar resultatet till generisk typ och addar till listan.
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return result;
+        return result; //Oberoende om vi jobbade med att hämta färger eller skor eller storlekar får vi ut det i denna generiska lista.
+    }
+
+    public DefaultListModel<String> getListModelOf(Output output) {
+        final List<Beställning> beställningList = getAllaBeställning();
+        Map<String, Integer> hashMap = new HashMap<>();
+
+        switch (output) {
+            case SPENT_PER_KUND -> {
+                beställningList.forEach(beställning -> {
+                    if (hashMap.containsKey(beställning.kundId.namn)) {
+                        hashMap.put(beställning.kundId.namn, hashMap.get(beställning.kundId.namn) + beställning.totalPris);
+                    } else {
+                        hashMap.put(beställning.kundId.namn, beställning.totalPris);
+                    }
+                });
+                DefaultListModel<String> listModel = new DefaultListModel<>();
+                for (Map.Entry<String, Integer> entry : hashMap.entrySet()) {
+                    listModel.addElement(entry.getKey() + " Värde : " + entry.getValue());
+                }
+                return listModel;
+            }
+            case ORDERS_PER_KUND -> {
+                beställningList.forEach(beställning -> {
+                    if (hashMap.containsKey(beställning.kundId.namn)) {
+                        hashMap.put(beställning.kundId.namn, hashMap.get(beställning.kundId.namn) + 1);
+                    } else {
+                        hashMap.put(beställning.kundId.namn, 1);
+                    }
+                });
+                DefaultListModel<String> listModel = new DefaultListModel<>();
+                for (Map.Entry<String, Integer> entry : hashMap.entrySet()) {
+                    listModel.addElement(entry.getKey() + " Antal beställningar : " + entry.getValue());
+                }
+                return listModel;
+            }
+            case SPENT_PER_STAD -> {
+                beställningList.forEach(beställning -> {
+                    if (hashMap.containsKey(beställning.kundId.adress)) {
+                        hashMap.put(beställning.kundId.adress, hashMap.get(beställning.kundId.adress) + beställning.totalPris);
+                    } else {
+                        hashMap.put(beställning.kundId.adress, beställning.totalPris);
+                    }
+                });
+                DefaultListModel<String> listModel = new DefaultListModel<>();
+                for (Map.Entry<String, Integer> entry : hashMap.entrySet()) {
+                    listModel.addElement(entry.getKey() + " Värde : " + entry.getValue());
+                }
+                return listModel;
+            }
+        }
+        return null;
     }
 
 
-    public void callAddToCart(int kundId, int skoId,String kundName) {
+    public void callAddToCart(int kundId, int skoId, String kundName) {
         try (Connection con = DriverManager.getConnection(
                 p.getProperty("connectionString"),
                 p.getProperty("username"),
@@ -65,9 +115,9 @@ public class Repository {
     }
 
 
-    public List<Färg> getAllaFärg() {
+    public List<Färg> getAllaFärg() {  //queryt som ska in som första parameter.
         return executeQuery("SELECT * FROM färg", rs -> {
-            try {
+            try {                                //ResultSet som ska in som andra parameter.
                 return new Färg(rs.getInt("färg.id"), rs.getString("färg.färg"));
 
             } catch (SQLException e) {
@@ -133,7 +183,7 @@ public class Repository {
         return executeQuery("""
                         SELECT beställning.*, kund.*
                         FROM beställning
-                                 JOIN kund ON beställning.kundId = kund.idd""",
+                                 JOIN kund ON beställning.kundId = kund.id""",
                 rs -> {
                     try {
                         Kund kund = null;

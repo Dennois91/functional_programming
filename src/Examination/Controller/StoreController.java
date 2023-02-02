@@ -93,6 +93,9 @@ public class StoreController extends JFrame {
                 showInventoryList();
             }
         } catch (Exception e) {
+            JOptionPane.showMessageDialog(null,
+                    "Du kan inte lägga till objekt till order som inte är en sko! "
+                    , "Ogiltigt val", JOptionPane.ERROR_MESSAGE);
             throw new RuntimeException(e);
         }
     }

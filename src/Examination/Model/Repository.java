@@ -61,7 +61,9 @@ public class Repository {
             stm.setInt(2, Integer.MAX_VALUE);
             stm.setInt(3, skoId);
             stm.execute();
-            System.out.println("Ny order skapad för " + kundName);
+            JOptionPane.showMessageDialog(null,
+                    "Ny order skapad för " + kundName
+                    , "Order skapad", JOptionPane.PLAIN_MESSAGE);
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "" + e.getMessage(), "Error code: " +
                     e.getErrorCode(), JOptionPane.ERROR_MESSAGE);

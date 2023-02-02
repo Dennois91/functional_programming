@@ -46,62 +46,16 @@ public class Repository {
         return result; //Oberoende om vi jobbade med att hämta färger eller skor eller storlekar får vi ut det i denna generiska lista.
     }
 
-
- /*   public void Grupper() {
-        beställningList.forEach(beställning -> {
-            if (hashMap.containsKey(beställning.kundId.namn)) {
-                hashMap.put(beställning.kundId.namn, hashMap.get(beställning.kundId.namn) + beställning.totalPris);
-            } else {
-                hashMap.put(beställning.kundId.namn, beställning.totalPris);
-            }
-        }
-    }
-
-  */
-
-
-    public DefaultListModel<String> getListModelOf(Output output) {
+    public DefaultListModel<String> getListModelOf(DataMapper dataMapper, Output output) {
         final List<Beställning> beställningList = getAllaBeställning();
-        Map<String, Integer> hashMap = new HashMap<>();
+        Map<String, Integer> hashMap = dataMapper.mapData(beställningList, output);
 
-        switch (output) {
-            case SPENT_PER_KUND -> {
-                beställningList.stream()
-                        .forEach(beställning -> hashMap
-                                .merge(beställning.kundId.namn, beställning.totalPris, Integer::sum));
-
-                DefaultListModel<String> listModel = new DefaultListModel<>();
-                for (Map.Entry<String, Integer> entry : hashMap.entrySet()) {
-                    listModel.addElement(entry.getKey() + " Värde : " + entry.getValue());
-                }
-                return listModel;
-            }
-            case ORDERS_PER_KUND -> {
-                beställningList.stream()
-                        .forEach(beställning -> hashMap
-                                .merge(beställning.kundId.namn, 1, Integer::sum));
-
-                DefaultListModel<String> listModel = new DefaultListModel<>();
-                for (Map.Entry<String, Integer> entry : hashMap.entrySet()) {
-                    listModel.addElement(entry.getKey() + " Antal beställningar : " + entry.getValue());
-                }
-                return listModel;
-            }
-            case SPENT_PER_STAD -> {
-                beställningList.stream()
-                        .forEach(beställning -> hashMap
-                                .merge(beställning.kundId.adress, beställning.totalPris, Integer::sum));
-
-                DefaultListModel<String> listModel = new DefaultListModel<>();
-                for (Map.Entry<String, Integer> entry : hashMap.entrySet()) {
-                    listModel.addElement(entry.getKey() + " Värde : " + entry.getValue());
-                }
-                return listModel;
-            }
+        DefaultListModel<String> listModel = new DefaultListModel<>();
+        for (Map.Entry<String, Integer> entry : hashMap.entrySet()) {
+            listModel.addElement(entry.getKey() + "Värde: " + entry.getValue());
         }
-        return null;
+        return listModel;
     }
-
 
     public void callAddToCart(int kundId, int skoId, String kundName) {
         try (Connection con = DriverManager.getConnection(

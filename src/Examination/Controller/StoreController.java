@@ -80,15 +80,15 @@ public class StoreController extends JFrame {
     }
 
     private void showSpendPerStad() {
-        list1.setModel(r.getListModelOf(Output.SPENT_PER_STAD));
+        list1.setModel(r.getListModelOf(new TotalBeställningarValuePerCityMapper(),Output.SPENT_PER_STAD));
     }
 
     public void showKundVärde() {
-        list1.setModel(r.getListModelOf(Output.SPENT_PER_KUND));
+        list1.setModel(r.getListModelOf(new TotalBeställningValuePerKundMapper(),Output.SPENT_PER_KUND));
     }
 
     public void showOrdersPerKund() {
-        list1.setModel(r.getListModelOf(Output.ORDERS_PER_KUND));
+        list1.setModel(r.getListModelOf(new TotalBeställningarMadeByKundMapper(),Output.ORDERS_PER_KUND));
     }
 
     public void showTopList() {

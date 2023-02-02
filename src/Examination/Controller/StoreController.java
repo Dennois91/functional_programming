@@ -40,10 +40,9 @@ public class StoreController extends JFrame {
         setSize(1000, 600);
         setLocationRelativeTo(null);
 
+        dropDownMenu.addActionListener(this::showSelectedReport);
         createOrderB.addActionListener(this::createOrder);
         addToOrder.addActionListener(this::addToOrder);
-        dropDownMenu.addActionListener(this::showSelectedReport);
-
 
     }
 
@@ -65,7 +64,7 @@ public class StoreController extends JFrame {
         if (menu.containsKey(selectedIndex)) {
             menu.get(selectedIndex).run();
         } else {
-            JOptionPane.showMessageDialog(null, "Unexpected error from reports",
+            JOptionPane.showMessageDialog(null, "Oväntat fel från val av rapport",
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -79,6 +78,20 @@ public class StoreController extends JFrame {
     HOTFIX Bröt ut sko identifieringen till metod convertStringSkoToSkoObject()
     HOTFIX La till metod addToOrder för att kunna modifera en befintlig order
     */
+
+    private Sko convertStringSkoToSkoObject(String articleString) {
+        final List<String> sko = Arrays.stream(articleString.split(" "))
+                .map(s -> {
+                    int i = s.indexOf(":");
+                    if (i != -1) {
+                        return s.substring(i + 1);
+                    } else {
+                        return s;
+                    }
+                })
+                .filter(s -> !s.isEmpty()).collect(Collectors.toList());
+        return findSkoId(sko);
+    }
 
     private void createOrder(ActionEvent event) {
         try {
@@ -126,20 +139,6 @@ public class StoreController extends JFrame {
                     , "Ogiltigt val", JOptionPane.ERROR_MESSAGE);
             throw new RuntimeException(e);
         }
-    }
-
-    private Sko convertStringSkoToSkoObject(String articleString) {
-        final List<String> sko = Arrays.stream(articleString.split(" "))
-                .map(s -> {
-                    int i = s.indexOf(":");
-                    if (i != -1) {
-                        return s.substring(i + 1);
-                    } else {
-                        return s;
-                    }
-                })
-                .filter(s -> !s.isEmpty()).collect(Collectors.toList());
-        return findSkoId(sko);
     }
 
     /* Högre ordningens Funktion:
@@ -247,10 +246,11 @@ public class StoreController extends JFrame {
     // TODO: 2/2/2023 Bygg klart funktion att söka via bar på Märke,Modell,Storlek eller färg.
     // Skapa en array av storlek 1-4 och använd split för att dela upp orden.
     // Finns fler än 1 ord i array visa enbart Match för all input
+    /*
     public void searchQuery() throws SQLException {
         String searchQuery = inputField.getText();
     }
-
+    */
     // TODO: 2/2/2023 Lägg till möjlighet att lägga till orders till en cart och sedan beställa hela carten i en order.
     // Visa carten dynamiskt i en extra JList parallelt med huvud Display.
 }

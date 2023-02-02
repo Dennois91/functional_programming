@@ -17,7 +17,7 @@ WHERE färg.färg = 'svart'
 
 SELECT Kategori.kategori, COUNT(skoKatMapp.skoId) as antal
 FROM Kategori
-         LEFT JOIN skoKatMapp ON Kategori.id = skoKatMapp.kategori
+         LEFT JOIN skoKatMapp ON Kategori.id = skoKatMapp.kategoriId
 GROUP BY Kategori.kategori;
 
 SELECT kund.namn, SUM(beställning.totalPris) as AllaKöp
@@ -29,7 +29,7 @@ group by kund.namn;
 SELECT kund.adress, SUM(beställning.totalPris) as AllaKöpIOrt
 From kund
          join beställning on kund.id = beställning.kundId
-where beställning.totalPris >= 1000
+where beställning.totalPris >= 100
 group by kund.adress;
 
 

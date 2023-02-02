@@ -134,4 +134,32 @@ public class StoreController extends JFrame {
                 .findFirst()
                 .orElse(null);
     }
+
 }
+/*
+    public void populateColorToProductTable() {
+        for (Product p : productMap.values()) {
+            for (Integer key : colorMap.keySet()) {
+                if (p.getColorID() == key) {
+                    p.setColor(colorMap.get(key));
+                }
+            }
+        }
+    }
+
+    public void populateColorToProductTable2() {
+        productMap.values().stream().forEach(p -> colorMap.keySet().stream().
+                forEach(key -> key == p.getColorID() ? p.setColor(colorMap.get(key)) :));
+    }
+
+    public void populateColorToProductTable2() {
+        productMap.values().stream().forEach(p -> colorMap.keySet().stream().
+                forEach(key -> key == p.getColorID() ? p.setColor(colorMap.get(key)) : null));
+    }
+}
+public void populateColorToProductTable2() {
+        productMap.values().stream().forEach(p -> colorMap.keySet().stream().
+        filter(key -> key == p.getColorID()).findFirst().ifPresent(key -> p.setColor(colorMap.get(key))));
+        }
+
+ */

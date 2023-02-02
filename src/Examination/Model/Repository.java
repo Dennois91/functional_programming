@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.*;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 
 public class Repository {
@@ -45,19 +46,30 @@ public class Repository {
         return result; //Oberoende om vi jobbade med att hämta färger eller skor eller storlekar får vi ut det i denna generiska lista.
     }
 
+
+ /*   public void Grupper() {
+        beställningList.forEach(beställning -> {
+            if (hashMap.containsKey(beställning.kundId.namn)) {
+                hashMap.put(beställning.kundId.namn, hashMap.get(beställning.kundId.namn) + beställning.totalPris);
+            } else {
+                hashMap.put(beställning.kundId.namn, beställning.totalPris);
+            }
+        }
+    }
+
+  */
+
+
     public DefaultListModel<String> getListModelOf(Output output) {
         final List<Beställning> beställningList = getAllaBeställning();
         Map<String, Integer> hashMap = new HashMap<>();
 
         switch (output) {
             case SPENT_PER_KUND -> {
-                beställningList.forEach(beställning -> {
-                    if (hashMap.containsKey(beställning.kundId.namn)) {
-                        hashMap.put(beställning.kundId.namn, hashMap.get(beställning.kundId.namn) + beställning.totalPris);
-                    } else {
-                        hashMap.put(beställning.kundId.namn, beställning.totalPris);
-                    }
-                });
+                beställningList.stream()
+                        .forEach(beställning -> hashMap
+                                .merge(beställning.kundId.namn, beställning.totalPris, Integer::sum));
+
                 DefaultListModel<String> listModel = new DefaultListModel<>();
                 for (Map.Entry<String, Integer> entry : hashMap.entrySet()) {
                     listModel.addElement(entry.getKey() + " Värde : " + entry.getValue());
@@ -65,13 +77,10 @@ public class Repository {
                 return listModel;
             }
             case ORDERS_PER_KUND -> {
-                beställningList.forEach(beställning -> {
-                    if (hashMap.containsKey(beställning.kundId.namn)) {
-                        hashMap.put(beställning.kundId.namn, hashMap.get(beställning.kundId.namn) + 1);
-                    } else {
-                        hashMap.put(beställning.kundId.namn, 1);
-                    }
-                });
+                beställningList.stream()
+                        .forEach(beställning -> hashMap
+                                .merge(beställning.kundId.namn, 1, Integer::sum));
+
                 DefaultListModel<String> listModel = new DefaultListModel<>();
                 for (Map.Entry<String, Integer> entry : hashMap.entrySet()) {
                     listModel.addElement(entry.getKey() + " Antal beställningar : " + entry.getValue());
@@ -79,13 +88,10 @@ public class Repository {
                 return listModel;
             }
             case SPENT_PER_STAD -> {
-                beställningList.forEach(beställning -> {
-                    if (hashMap.containsKey(beställning.kundId.adress)) {
-                        hashMap.put(beställning.kundId.adress, hashMap.get(beställning.kundId.adress) + beställning.totalPris);
-                    } else {
-                        hashMap.put(beställning.kundId.adress, beställning.totalPris);
-                    }
-                });
+                beställningList.stream()
+                        .forEach(beställning -> hashMap
+                                .merge(beställning.kundId.adress, beställning.totalPris, Integer::sum));
+
                 DefaultListModel<String> listModel = new DefaultListModel<>();
                 for (Map.Entry<String, Integer> entry : hashMap.entrySet()) {
                     listModel.addElement(entry.getKey() + " Värde : " + entry.getValue());

@@ -15,6 +15,13 @@ public class LoginController extends JFrame {
     private JTextField usernameTextField;
     final private List<Kund> kunder = r.getAllaKunder();
 
+    /*
+    Repository skapas upp en gång och enbart härifrån
+    Kundlist skapas för att matcha användarnamn och lösenord
+    Vid giltigt login körs metoden valid login och loginfönster stängs
+    Vi skickar med kund och repository in i StoreController som skapas upp
+     */
+
     public LoginController() {
         setContentPane(loginPanel);
         setResizable(false);

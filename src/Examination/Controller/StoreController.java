@@ -115,10 +115,6 @@ public class StoreController extends JFrame {
         list1.setModel(listModel);
     }
 
-    public void searchQuery() throws SQLException {
-        String searchQuery = searchField.getText();
-    }
-
     public String findSkoById(int skoId) {
         final List<Sko> skoList = r.getAllaSko();
         return skoList.stream().filter(sko -> sko.getId() == skoId).map(Sko::getSko).findFirst().orElse("");
@@ -135,31 +131,13 @@ public class StoreController extends JFrame {
                 .orElse(null);
     }
 
+    // TODO: 2/2/2023 Bygg klart funktion att söka via bar på Märke,Modell,Storlek eller färg.
+    // Skapa en array av storlek 1-4 och använd split för att dela upp orden.
+    // Finns fler än 1 ord i array visa enbart Match för all input
+    public void searchQuery() throws SQLException {
+        String searchQuery = searchField.getText();
+    }
+
+    // TODO: 2/2/2023 Lägg till möjlighet att lägga till orders till en cart och sedan beställa hela carten i en order.
+    // Visa carten dynamiskt i en extra JList parallelt med huvud Display.
 }
-/*
-    public void populateColorToProductTable() {
-        for (Product p : productMap.values()) {
-            for (Integer key : colorMap.keySet()) {
-                if (p.getColorID() == key) {
-                    p.setColor(colorMap.get(key));
-                }
-            }
-        }
-    }
-
-    public void populateColorToProductTable2() {
-        productMap.values().stream().forEach(p -> colorMap.keySet().stream().
-                forEach(key -> key == p.getColorID() ? p.setColor(colorMap.get(key)) :));
-    }
-
-    public void populateColorToProductTable2() {
-        productMap.values().stream().forEach(p -> colorMap.keySet().stream().
-                forEach(key -> key == p.getColorID() ? p.setColor(colorMap.get(key)) : null));
-    }
-}
-public void populateColorToProductTable2() {
-        productMap.values().stream().forEach(p -> colorMap.keySet().stream().
-        filter(key -> key == p.getColorID()).findFirst().ifPresent(key -> p.setColor(colorMap.get(key))));
-        }
-
- */

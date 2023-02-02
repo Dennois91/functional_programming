@@ -50,7 +50,9 @@ public class Repository {
         return result; //Oberoende om vi jobbade med att hämta färger eller skor eller storlekar får vi ut det i denna generiska lista.
     }
 
-    public void callAddToCart(int kundId, int skoId, String kundName) {
+    public void callAddToCart(int kundId, int skoId, String kundName, int orderId, Output typeOfOrder) {
+
+
         try (Connection con = DriverManager.getConnection(
                 p.getProperty("connectionString"),
                 p.getProperty("username"),
@@ -58,12 +60,17 @@ public class Repository {
 
              CallableStatement stm = con.prepareCall("CALL AddToCart(?,?,?)")) {
             stm.setInt(1, kundId);
-            stm.setInt(2, Integer.MAX_VALUE);
+            stm.setInt(2, orderId);
             stm.setInt(3, skoId);
             stm.execute();
-            JOptionPane.showMessageDialog(null,
-                    "Ny order skapad för " + kundName
-                    , "Order skapad", JOptionPane.PLAIN_MESSAGE);
+            switch (typeOfOrder) {
+                case NY_ORDER -> JOptionPane.showMessageDialog(null,
+                        "Ny order skapad för " + kundName
+                        , "Order skapad", JOptionPane.PLAIN_MESSAGE);
+                case UPPDATERA_ORDER -> JOptionPane.showMessageDialog(null,
+                        "Sko tillagd i order: " + orderId + " För: " + kundName
+                        , "Order uppdaterad", JOptionPane.PLAIN_MESSAGE);
+            }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "" + e.getMessage(), "Error code: " +
                     e.getErrorCode(), JOptionPane.ERROR_MESSAGE);

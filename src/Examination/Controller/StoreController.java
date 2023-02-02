@@ -14,11 +14,11 @@ import java.util.stream.Collectors;
 public class StoreController extends JFrame {
     private JPanel storePanel;
     private JList<String> list1;
-    private JTextField searchField;
+    private JTextField inputField;
     private JButton searchButton;
     private JComboBox dropDownMenu;
     private JButton createOrderB;
-    private JButton addToCartB;
+    private JButton addToOrder;
     private JButton removeFromCartB;
     private JLabel userNameLabel;
     private final Repository r;
@@ -41,7 +41,10 @@ public class StoreController extends JFrame {
         setLocationRelativeTo(null);
 
         createOrderB.addActionListener(this::createOrder);
+        addToOrder.addActionListener(this::addToOrder);
         dropDownMenu.addActionListener(this::showSelectedReport);
+
+
     }
 
     /*
@@ -68,28 +71,21 @@ public class StoreController extends JFrame {
     }
     /*
     createOrder tar selected rad i Jlist och sparar till en string
-    Splitt stringen till en lista av strings som ska definera en sko
+    Splittar stringen till en lista av strings som ska definera en sko
     Stringen skickas till metoden findSkoId för att hitta rätt sko objekt
     Kund.ID - Sko.ID - Kund.namn Skickas till callAddToCart
     showInventoryList() hämtar och uppdaterar listan för att visa alla skor i lager.
+
+    HOTFIX Bröt ut sko identifieringen till metod convertStringSkoToSkoObject()
+    HOTFIX La till metod addToOrder för att kunna modifera en befintlig order
     */
 
     private void createOrder(ActionEvent event) {
         try {
             String articleString = list1.getSelectedValue();
             if (articleString != null) {
-                final List<String> sko = Arrays.stream(articleString.split(" "))
-                        .map(s -> {
-                            int i = s.indexOf(":");
-                            if (i != -1) {
-                                return s.substring(i + 1);
-                            } else {
-                                return s;
-                            }
-                        })
-                        .filter(s -> !s.isEmpty()).collect(Collectors.toList());
-                final Sko skoObject = findSkoId(sko);
-                r.callAddToCart(kund.id, skoObject.id, kund.namn);
+                Sko skoObject = convertStringSkoToSkoObject(articleString);
+                r.callAddToCart(kund.id, skoObject.id, kund.namn, Integer.MAX_VALUE, Output.NY_ORDER);
                 showInventoryList();
             }
         } catch (Exception e) {
@@ -98,6 +94,52 @@ public class StoreController extends JFrame {
                     , "Ogiltigt val", JOptionPane.ERROR_MESSAGE);
             throw new RuntimeException(e);
         }
+    }
+
+    private void addToOrder(ActionEvent event) {
+        try {
+            String articleString = list1.getSelectedValue();
+            if (articleString != null) {
+
+                Sko skoObject = convertStringSkoToSkoObject(articleString);
+                try {
+                    int orderNumber = Integer.parseInt(inputField.getText().trim());
+                    if (orderNumber == 0) {
+                        JOptionPane.showMessageDialog(null,
+                                "Ordernummer får inte vara 0! "
+                                , "Ogiltig input", JOptionPane.ERROR_MESSAGE);
+
+                    } else {
+                        r.callAddToCart(kund.id, skoObject.id, kund.namn, orderNumber, Output.UPPDATERA_ORDER);
+                    }
+
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(null,
+                            "Ogiltig input i fält. Använd endast nummer!  "
+                            , "Ogiltig input", JOptionPane.ERROR_MESSAGE);
+                }
+                showInventoryList();
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null,
+                    "Du kan inte lägga till objekt till order som inte är en sko! "
+                    , "Ogiltigt val", JOptionPane.ERROR_MESSAGE);
+            throw new RuntimeException(e);
+        }
+    }
+
+    private Sko convertStringSkoToSkoObject(String articleString) {
+        final List<String> sko = Arrays.stream(articleString.split(" "))
+                .map(s -> {
+                    int i = s.indexOf(":");
+                    if (i != -1) {
+                        return s.substring(i + 1);
+                    } else {
+                        return s;
+                    }
+                })
+                .filter(s -> !s.isEmpty()).collect(Collectors.toList());
+        return findSkoId(sko);
     }
 
     /* Högre ordningens Funktion:
@@ -206,7 +248,7 @@ public class StoreController extends JFrame {
     // Skapa en array av storlek 1-4 och använd split för att dela upp orden.
     // Finns fler än 1 ord i array visa enbart Match för all input
     public void searchQuery() throws SQLException {
-        String searchQuery = searchField.getText();
+        String searchQuery = inputField.getText();
     }
 
     // TODO: 2/2/2023 Lägg till möjlighet att lägga till orders till en cart och sedan beställa hela carten i en order.

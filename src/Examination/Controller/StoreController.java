@@ -24,6 +24,11 @@ public class StoreController extends JFrame {
     private final Repository r;
     private final Kund kund;
 
+    /*
+    Store kontroller startas upp med referens till repository som vi startade i loginController samt kund
+    Det finns 2 actionListeners. En för CreateOrder knappen och en för RapportMenyn
+    */
+
 
     public StoreController(Kund kund, Repository r) throws HeadlessException {
         this.r = r;
@@ -38,6 +43,12 @@ public class StoreController extends JFrame {
         createOrderB.addActionListener(this::createOrder);
         dropDownMenu.addActionListener(this::showSelectedReport);
     }
+
+    /*
+    showSelectedReport fungerar som en switch.
+    Varje metod som ska kallas i dropDownMenyn mappas till ett index värde och interfacet Runnable
+    När listener på dropDownMenu triggas tittar vi efter index värdet och matchar med nyckelvärdet i mappen och kör .run
+    */
 
     private void showSelectedReport(ActionEvent event) {
         Map<Integer, Runnable> menu = new HashMap<>();
@@ -55,6 +66,13 @@ public class StoreController extends JFrame {
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+    /*
+    createOrder tar selected rad i Jlist och sparar till en string
+    Splitt stringen till en lista av strings som ska definera en sko
+    Stringen skickas till metoden findSkoId för att hitta rätt sko objekt
+    Kund.ID - Sko.ID - Kund.namn Skickas till callAddToCart
+    showInventoryList() hämtar och uppdaterar listan för att visa alla skor i lager.
+    */
 
     private void createOrder(ActionEvent event) {
         try {
@@ -79,17 +97,50 @@ public class StoreController extends JFrame {
         }
     }
 
+    /* Högre ordningens Funktion:
+       Tar in en DataMapper och ett Enum. Skriver ut en ListModel för display i JList
+       DataMapper tar in en List och ett enum. Mappar list datat och returnerar en HashMap.
+
+       För varje entry i hashMap adderar vi raden till listModel och return den fyllda ListModel
+       för display i Jlist
+    */
+
+    public DefaultListModel<String> getListModelOf(DataMapper dataMapper, Output output) {
+        final List<Beställning> beställningList = r.getAllaBeställning();
+        Map<String, Integer> hashMap = dataMapper.mapData(beställningList, output);
+
+        DefaultListModel<String> listModel = new DefaultListModel<>();
+        for (Map.Entry<String, Integer> entry : hashMap.entrySet()) {
+            listModel.addElement(entry.getKey() + " Värde: " + entry.getValue());
+        }
+        return listModel;
+    }
+
+    /*
+    3 stycken i princip identiska hämtningar av rapporter med 3 klasser som implementer interfacet DataMapper
+    */
+
     private void showSpendPerStad() {
-        list1.setModel(r.getListModelOf(new TotalBeställningarValuePerCityMapper(),Output.SPENT_PER_STAD));
+        list1.setModel(getListModelOf(new TotalBeställningarValuePerCityMapper(), Output.SPENT_PER_STAD));
     }
 
     public void showKundVärde() {
-        list1.setModel(r.getListModelOf(new TotalBeställningValuePerKundMapper(),Output.SPENT_PER_KUND));
+        list1.setModel(getListModelOf(new TotalBeställningValuePerKundMapper(), Output.SPENT_PER_KUND));
     }
 
     public void showOrdersPerKund() {
-        list1.setModel(r.getListModelOf(new TotalBeställningarMadeByKundMapper(),Output.ORDERS_PER_KUND));
+        list1.setModel(getListModelOf(new TotalBeställningarMadeByKundMapper(), Output.ORDERS_PER_KUND));
     }
+
+    /*
+    showTopList skapar en topplista av mest sålda skor
+    Först hämtas alla kundvagnar som innehåller Skon samt antal per sko
+    skoCountMap sätter sko till nyckel och adderar antalet till skon om nyckeln finns
+
+    En TopList lista skapas som får värdena av skoCountMap i omvänd ordning för att visa högsta värdet högst upp
+    Och en listModel skapas och för varje element i topList hämtar vi skoID och kör igenom findSkoByID och lägger till
+    i listModel samt antal sålda skor per skoId
+    */
 
     public void showTopList() {
         final List<Kundvagn> kundvagnList = r.getAllaKundvagn();
@@ -102,10 +153,17 @@ public class StoreController extends JFrame {
                 .sorted(Comparator.comparingInt(TopList::getCount).reversed())
                 .collect(Collectors.toList());
 
-        final DefaultListModel<String> topListString = new DefaultListModel<>();
-        topList.forEach(tl -> topListString.addElement(findSkoById(tl.getSkoId()) + " antal sålda: " + tl.getCount()));
-        list1.setModel(topListString);
+        final DefaultListModel<String> listModel = new DefaultListModel<>();
+        topList.forEach(tl -> listModel.addElement(findSkoById(tl.getSkoId()) + " antal sålda: " + tl.getCount()));
+        list1.setModel(listModel);
     }
+
+    /*
+    showInventoryList Hämtar alla skor, Skapar en collator för att kunna sortera efter svenska
+    skapar en ListModel
+    För varje sko i listan använder vi metoden getInventory i sko för att få
+    en bättre utskrift till kund och lägger strängen till listModel och sätter listModel
+    */
 
     public void showInventoryList() {
         final List<Sko> skoList = r.getAllaSko();
@@ -115,10 +173,20 @@ public class StoreController extends JFrame {
         list1.setModel(listModel);
     }
 
+    /*
+    findSkoById tar in en int och hittar skon i en lista med skor och returns en sträng av Skon med id't för att
+    visa skon i topplista.
+    */
+
     public String findSkoById(int skoId) {
         final List<Sko> skoList = r.getAllaSko();
         return skoList.stream().filter(sko -> sko.getId() == skoId).map(Sko::getSko).findFirst().orElse("");
     }
+
+    /*
+    findSkoId använder strängen som kommer ifrån selectedValue i Jlist för att identifiera skon och hitta rätt objekt
+    till vald sko och return hela sko objektet.
+    */
 
     public Sko findSkoId(List<String> sko) {
         final List<Sko> skoList = r.getAllaSko();

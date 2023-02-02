@@ -6,3 +6,6 @@ public class TotalBeställningarMadeByKundMapper implements DataMapper{
         return beställning.kundId.namn;
     }
 }
+/*
+Returns Kund namn från beställningen för att visa orders lagda av kund
+*/

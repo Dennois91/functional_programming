@@ -6,3 +6,6 @@ public class TotalBeställningValuePerKundMapper implements DataMapper{
         return beställning.kundId.namn;
     }
 }
+/*
+Returns kund namn för att visa namn på kund med respektive ordervärde
+*/

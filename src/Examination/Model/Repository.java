@@ -50,24 +50,6 @@ public class Repository {
         return result; //Oberoende om vi jobbade med att hämta färger eller skor eller storlekar får vi ut det i denna generiska lista.
     }
 
-    /* Högre ordningens Funktion:
-       Tar in en DataMapper och ett Enum. Skriver ut en ListModel för display i JList
-       DataMapper tar in en List och ett enum. Mappar list datat och returnerar en HashMap.
-
-       För varje entry i hashMap adderar vi raden till listModel.
-     */
-
-    public DefaultListModel<String> getListModelOf(DataMapper dataMapper, Output output) {
-        final List<Beställning> beställningList = getAllaBeställning();
-        Map<String, Integer> hashMap = dataMapper.mapData(beställningList, output);
-
-        DefaultListModel<String> listModel = new DefaultListModel<>();
-        for (Map.Entry<String, Integer> entry : hashMap.entrySet()) {
-            listModel.addElement(entry.getKey() + "Värde: " + entry.getValue());
-        }
-        return listModel;
-    }
-
     public void callAddToCart(int kundId, int skoId, String kundName) {
         try (Connection con = DriverManager.getConnection(
                 p.getProperty("connectionString"),

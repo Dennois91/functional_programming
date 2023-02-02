@@ -8,6 +8,15 @@ import java.util.Map;
 public interface DataMapper {
     String mapKey(Beställning beställning);
 
+    /*
+    Beställning sätts som nyckel för att använda i HashMap
+
+    default metoden mapData tar in en lista med beställningar och ett ENUM och return en fylld hashMap
+    En HashMap skapas upp
+    För varje beställning i listan beräknas antalet ordar ELLER Summan av ordrar
+    beroende på om vi får in Enumet ORDERS_PER_KUND
+    */
+
     default Map<String, Integer> mapData(List<Beställning> beställningList, Output output) {
         Map<String, Integer> hashMap = new HashMap<>();
         beställningList.stream().

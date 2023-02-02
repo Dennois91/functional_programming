@@ -6,3 +6,6 @@ public class TotalBeställningarValuePerCityMapper implements DataMapper{
         return beställning.kundId.adress;
     }
 }
+/*
+Returns Adress från beställningen för att visa order värdet per stad
+*/

@@ -2,6 +2,8 @@ package Assignments_functionall_programming.Assignment_3;
 
 import java.util.List;
 import static java.util.Arrays.asList;
+
+import Weeks_With_JAVA.Assignments_functionall_programming.Assignment_3.UpperCase;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 /*

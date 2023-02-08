@@ -1,5 +1,7 @@
 package Assignments_JDBC_1_to_6.apps;
 
+import Weeks_With_JAVA.Assignments_JDBC_1_to_6.apps.MonitorUpdater;
+
 class MonitorUpdaterTest {
     MonitorUpdater monitorUpdater = new MonitorUpdater();
 

@@ -1,7 +1,6 @@
 package Assignments_functionall_programming.Assignment_3;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+import Weeks_With_JAVA.Assignments_functionall_programming.Assignment_3.LessThenFour;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

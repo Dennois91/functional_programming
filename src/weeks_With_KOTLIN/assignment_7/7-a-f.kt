@@ -1,7 +1,7 @@
 package weeks_With_KOTLIN.assignment_7
 
 const val initialValue = 10000.0
-const val yearsToAccumulate = 50
+const val yearsToAccumulate = 100
 const val interestRate = 0.07
 const val parenthesis = "(()())())"
 val listOfInts = listOf(1, 2, 3)

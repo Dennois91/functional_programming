@@ -11,23 +11,44 @@ fun main() {
     val katt = Djur("Katt", 4)
     otherSetOfDjur.add(hund)
     otherSetOfDjur.add(hund)
-    /*
-      printInfo()
-      printLegs()
-      printType()
-     */
-    val djurMap = mapOf("Pelle" to hund, "Ebba" to katt)
-    djurMap.forEach{ entry -> println(entry.key) }
 
-   // setOfDjur.forEach { djur -> println(djur.sort) }
-   // otherSetOfDjur.forEach { djur -> println(djur.sort) }
+    printInfo()
+    printLegs()
+    printType()
+
+    val djurMap = mapOf("Pelle" to hund, "Ebba" to katt)
+    djurMap.forEach { entry -> println(entry.key) }
+
+    setOfDjur.forEach { djur -> println(djur.sort) }
+    otherSetOfDjur.forEach { djur -> println(djur.sort) }
+
+    println(soundOfAnimal(listOfDjur[1]))
+
+}
+
+fun soundOfAnimal(djur: Djur): String {
+    return when (djur.sort) {
+        "Struts" -> "Struts say kwakwa"
+        "Häst" -> "Häst says IIhhhhhhhihihi"
+        "Katt" -> "Katt says Meow"
+        "Hund" -> "Hund says voff"
+        else -> {
+            "Okänt läte"
+        }
+    }
 }
 
 fun printInfo() = listOfDjur.map { djur -> djur.printInfo() }
 fun printLegs() = listOfDjur.forEach { djur -> println(djur.antalBen) }
 fun printType() = listOfDjur.forEach { djur -> println(djur.sort) }
 
+
 /*
+Uppgift 4e – When
+Skapa en funktion som tar ett Djur som inparameter. Beroende på Djurets sort ska du skriva ut djurets
+läte. Använd en When-sats (Kotlins motsvarighet till Switch)
+
+
 Uppgift 4a– Klassen Djur
 Skapa en klass ”Djur” som har en
 • String ”Sort”

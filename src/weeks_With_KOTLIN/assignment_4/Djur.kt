@@ -1,6 +1,6 @@
 package weeks_With_KOTLIN.assignment_4
 
-class Djur(val sort : String, val antalBen : Int) {
+class Djur(var sort : String, val antalBen : Int) {
 
  fun printInfo(){
      println("Djuret är av typ $sort och har $antalBen antal ben")

@@ -12,6 +12,7 @@ fun main() {
     val dataAsInt = mapDataToInt(data)
     val topElfs = getTopThree(dataAsInt)
     printTopThree(topElfs, dataAsInt)
+    sumOfTopThree(topElfs)
 }
 
 fun readFromFile(): MutableList<String>? {
@@ -45,12 +46,16 @@ fun getTopThree(dataAsInt: List<List<Int>>): List<List<Int>> {
 }
 
 fun printTopThree(topElfs: List<List<Int>>, dataAsInt: List<List<Int>>) {
-    topElfs.forEachIndexed { index, group ->
-        val sum = group.sum()
-        val groupIndex = dataAsInt.indexOf(group)
+    topElfs.forEachIndexed { index, elf ->
+        val sum = elf.sum()
+        val groupIndex = dataAsInt.indexOf(elf)
         println("Elf $groupIndex is in position ${index + 1} with sum $sum")
     }
 }
 
+fun sumOfTopThree(topThree: List<List<Int>>) {
+    val sum = topThree.flatten().sum()
+    println("Sum of top three: $sum")
+}
 
 

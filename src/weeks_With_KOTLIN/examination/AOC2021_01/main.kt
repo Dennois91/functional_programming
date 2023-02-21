@@ -61,3 +61,5 @@ fun readFromFile(): MutableList<String>? {
     val filePath = Paths.get("src/weeks_With_KOTLIN/examination/AOC2021_01/data.txt")
     return Files.readAllLines(filePath)
 }
+
+//https://adventofcode.com/2021/day/1

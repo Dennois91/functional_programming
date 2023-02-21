@@ -58,4 +58,5 @@ fun sumOfTopThree(topThree: List<List<Int>>) {
     println("Sum of top three: $sum")
 }
 
+//https://adventofcode.com/2022/day/1
 

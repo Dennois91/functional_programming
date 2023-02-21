@@ -53,3 +53,5 @@ fun getCharValue(char: Set<Char>): Int {
         charValue - 'a'.code + 1
     }
 }
+
+//https://adventofcode.com/2022/day/3

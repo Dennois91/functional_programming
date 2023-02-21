@@ -73,4 +73,4 @@ fun readFromFile(): MutableList<String>? {
     return Files.readAllLines(filePath)
 }
 
-
+//https://adventofcode.com/2022/day/2

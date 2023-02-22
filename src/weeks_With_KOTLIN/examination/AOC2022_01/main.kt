@@ -8,11 +8,15 @@ var elf = mutableListOf<String>()
 
 fun main() {
 
+    improvedSolution()  // Inspired by https://todd.ginsberg.com/post/advent-of-code/2022/day1/
+
     readFromFile()?.let { populateLists(it) }
     val dataAsInt = mapDataToInt(data)
     val topElfs = getTopThree(dataAsInt)
     printTopThree(topElfs, dataAsInt)
     sumOfTopThree(topElfs)
+
+
 }
 
 fun readFromFile(): MutableList<String>? {
@@ -58,5 +62,41 @@ fun sumOfTopThree(topThree: List<List<Int>>) {
     println("Sum of top three: $sum")
 }
 
-//https://adventofcode.com/2022/day/1
+fun improvedSolution() {
+    val filePath = Paths.get("src/weeks_With_KOTLIN/examination/AOC2022_01/data.txt")
+    val input = Files.readString(filePath)
 
+    val sums = input.split("\n\r")
+        .map { l -> l.trim().split("\\s+".toRegex())
+            .sumOf { it.toInt() } }
+
+    val topThree = sums.sortedDescending().take(3)
+    println("Sums of top three groups: ${topThree.sortedDescending()}")
+}
+
+
+/**
+ * Jag hittade denna lösning som jag försökte implementera men av någon anledning finns de något dolt tecken i min
+ * input fil så jag kunde inte konvertera mina strings till ints med denna lösning nedan utan jag var tvungen att split
+ * på detta sätt: val numbers = split("\\s+".toRegex()).map { it.toInt() }
+ *
+ * class Day01(input: String) {
+ *
+ *     private val calories = parseInput(input)
+ *
+ *     private fun parseInput(input: String): List<Int> =
+ *         input
+ *             .trim()
+ *             .split("\n\n")
+ *             .map { it.lines().sumOf(String::toInt) }
+ *             .sortedDescending()
+ * }
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ * https://adventofcode.com/2022/day/1
+ */

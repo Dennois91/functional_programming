@@ -35,7 +35,8 @@ fun main() {
     )
 
     val hierarchyTree = createHierarchyTree(hierarchy,"Tomten")
-    hierarchyTree.getSubordinates("Butter").forEach { elf -> println(elf.name) }
+    hierarchyTree.getSubordinates("Glader").joinToString(", ") { it.name }
+        .let { subordinateNames -> println(subordinateNames) }
 
 }
 

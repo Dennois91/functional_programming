@@ -18,6 +18,8 @@ import java.nio.file.Paths
 fun main() {
     partA()
     partB()
+    improvedSolution()
+
 }
 
 fun partB() {
@@ -68,7 +70,53 @@ fun partA() {
     println(points)
 }
 
-fun readFromFile(): MutableList<String>? {
+fun improvedSolution() {
+    val input = readFromFile()
+
+    val part1Scores: Map<String, Int> =
+        mapOf(
+            "A X" to 1 + 3,
+            "A Y" to 2 + 6,
+            "A Z" to 3 + 0,
+            "B X" to 1 + 0,
+            "B Y" to 2 + 3,
+            "B Z" to 3 + 6,
+            "C X" to 1 + 6,
+            "C Y" to 2 + 0,
+            "C Z" to 3 + 3,
+        )
+
+    val part2Scores: Map<String, Int> =
+        mapOf(
+            "A X" to 3 + 0,
+            "A Y" to 1 + 3,
+            "A Z" to 2 + 6,
+            "B X" to 1 + 0,
+            "B Y" to 2 + 3,
+            "B Z" to 3 + 6,
+            "C X" to 2 + 0,
+            "C Y" to 3 + 3,
+            "C Z" to 1 + 6,
+        )
+
+
+    fun solvePart1(): Int =
+        input!!.map { it.split(" ") }.sumOf { part1Scores[it.joinToString(" ")] ?: 0 }
+
+    fun solvePart2(): Int =
+        input!!.map { it.split(" ") }.sumOf { part2Scores[it.joinToString(" ")] ?: 0 }
+
+    println(solvePart1())
+    println(solvePart2())
+}
+
+/**
+ * Fanns inte mycket att tillägga här. Men version med mapp från https://todd.ginsberg.com/post/advent-of-code/2022/day2/
+ * är helt klart snyggare och lättare att underhålla och uppdatera och det jag tar med mig härifrån är att verkligen
+ * komma ihåg att använda mapps så mycket som möjligt.
+ */
+
+fun readFromFile(): List<String>? {
     val filePath = Paths.get("src/weeks_With_KOTLIN/examination/AOC2022_02/data.txt")
     return Files.readAllLines(filePath)
 }

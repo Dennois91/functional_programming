@@ -12,6 +12,15 @@ fun main() {
 
 }
 
+/*
+På Denna lösning hittade jag inte någon lösning som jag tyckte var bättre. Jag kollade på https://todd.ginsberg.com/post/advent-of-code/2021/day2/
+Men den kändes bara betydligt mer komplicerad och svår att följa än koden jag skrivit nedanför.
+Min kod är ganska lik med att den använder When på samma sätt bara det att jag inte använder Command functionen utan räknar ut allt
+direkt i when satsen.
+Jag tycker min är simplare eftersom att input filen alltid har värdet efter " " vi ska flytta.
+Och Kommandot är alltid första ordet i line.
+*/
+
 fun taskB() {
     yCordinat=0
     xCordinat=0

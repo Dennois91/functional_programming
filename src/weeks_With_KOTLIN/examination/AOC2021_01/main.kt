@@ -6,12 +6,23 @@ import java.nio.file.Paths
 fun main() {
     taskA()
     taskB()
+    taskBImproved()
 
 }
+fun taskBImproved() {
+    val files = readFromFile()
+    val dataAsIntList = files?.map { it.toInt() }
+    //Förbättrade version där jag skapar en extension function till List som tar N antal element i listan -
+    //Summerar elementen, returnerar värdet i en ny list. Sedan går ett steg ner i listan och summerar N antal element -
+    //Och repeterar. Resultatet blir en ny lista med de summerade värdena i grupper av storlek N
+    //Inspiration ifrån https://todd.ginsberg.com/post/advent-of-code/2021/day1/
 
-fun List<Int>.sumGroupOfSize(groupSize: Int): List<Int> {
+    fun List<Int>.sumGroupOfSize(groupSize: Int): List<Int> {
+        return this.windowed(groupSize, 1) { it.sum() }
+    }
 
-    return this.windowed(groupSize, 1) { it.sum() }
+    val listOfGroups = dataAsIntList?.sumGroupOfSize(3)
+    println(listOfGroups?.zipWithNext()?.count { it.first < it.second })
 }
 
 fun taskB() {
@@ -27,14 +38,9 @@ fun taskB() {
             groupOfMeasures.add(files[i + 1])
             groupOfMeasures.add(files[i + 2])
             listOfGroups.add(groupOfMeasures)
-
         }
     }
-
     val dataAsIntList = listOfGroups!!.map { group -> group.map { line -> line.toInt() } }
-
-    val value = dataAsIntList.map { l -> l.sumGroupOfSize(3) }
-    //Todo Get the extention on List working and use the sum of groups in list of list of int. need to make to List of Int
 
     var count = 0
 
@@ -45,10 +51,8 @@ fun taskB() {
         if (firstGrouping.sum() < secondGrouping.sum()) {
             count += 1
         }
-
     }
     println(count)
-
 }
 
 fun taskA() {

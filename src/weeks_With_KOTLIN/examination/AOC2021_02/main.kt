@@ -7,28 +7,27 @@ var xCordinat = 0 //Frammåt
 var yCordinat = 0 //Upp ner
 
 fun main() {
-    taskA()
-    taskB()
+    taskA(readFromFile())
+    taskB(readFromFile())
 
 }
 
-/*
-På Denna lösning hittade jag inte någon lösning som jag tyckte var bättre. Jag kollade på https://todd.ginsberg.com/post/advent-of-code/2021/day2/
-Men den kändes bara betydligt mer komplicerad och svår att följa än koden jag skrivit nedanför.
-Min kod är ganska lik med att den använder When på samma sätt bara det att jag inte använder Command functionen utan räknar ut allt
-direkt i when satsen.
-Jag tycker min är simplare eftersom att input filen alltid har värdet efter " " vi ska flytta.
-Och Kommandot är alltid första ordet i line.
-*/
+/**
+ * På Denna lösning hittade jag inte någon lösning som jag tyckte var bättre. Jag kollade på https://todd.ginsberg.com/post/advent-of-code/2021/day2/
+ * Men den kändes bara betydligt mer komplicerad och svår att följa än koden jag skrivit nedanför.
+ * Min kod är ganska lik med att den använder When på samma sätt bara det att jag inte använder Command function utan räknar ut allt
+ * direkt i when satsen.
+ * Jag tycker min är simplare eftersom att input filen alltid har värdet efter " " vi ska flytta.
+ * Och Kommandot är alltid första ordet i line.
+ */
 
-fun taskB() {
+fun taskB(readFromFile: MutableList<String>?): Int {
     yCordinat=0
     xCordinat=0
     var aim = 0
 
-    val listOfFile = readFromFile()
-    if (listOfFile != null) {
-        for (line in listOfFile) {
+    if (readFromFile != null) {
+        for (line in readFromFile) {
             when {
                 "forward" in line -> {
                     val value = line.substringAfterLast(" ").toInt()
@@ -36,10 +35,12 @@ fun taskB() {
                     val depthIncrement = aim * value
                     yCordinat += depthIncrement
                 }
+
                 "up" in line -> {
                     val value = line.substringAfterLast(" ").toInt()
                     aim -= value
                 }
+
                 "down" in line -> {
                     val value = line.substringAfterLast(" ").toInt()
                     aim += value
@@ -49,16 +50,16 @@ fun taskB() {
     }
     val depth = yCordinat
     println("x = $xCordinat, y = $yCordinat, depth = $depth, result = ${xCordinat * yCordinat}")
+    return xCordinat * yCordinat
 }
 
 
 
-fun taskA() {
+fun taskA(readFromFile: MutableList<String>?): Int {
     yCordinat=0
     xCordinat=0
-    val listOfFile = readFromFile()
-    if (listOfFile != null) {
-        for (line in listOfFile) {
+    if (readFromFile != null) {
+        for (line in readFromFile) {
             when {
                 "forward" in line -> {
                     val value = line.substringAfterLast(" ").toInt()
@@ -78,6 +79,7 @@ fun taskA() {
         }
     }
     println("x = $xCordinat     y = $yCordinat    ${xCordinat * yCordinat}")
+    return xCordinat * yCordinat
 }
 
 fun readFromFile(): MutableList<String>? {

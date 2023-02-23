@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Assertions.*
 
 class MainKtTest {
 
-
     @Test
     fun testMapDataToInt() {
         val input = mutableListOf<List<String>>()
@@ -19,11 +18,6 @@ class MainKtTest {
 
         assertTrue(result is List<List<Int>>, "The result should be a list of int lists")
     }
-    /*
-    fun mapDataToInt(data: List<List<String>>): List<List<Int>> {
-    return data.map { e -> e.map { s -> s.toIntOrNull() ?: 0 } }
-}
-     */
 
     @Test
     fun testGetTopThree() {

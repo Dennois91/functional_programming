@@ -3,17 +3,15 @@ package weeks_With_KOTLIN.examination.AOC2022_03
 import java.nio.file.Files
 import java.nio.file.Paths
 
-var testList = mutableListOf<String>()
-
 fun main() {
-    partA()
-    partB()
+    println(partA(readFromFile()))
+    println(partB(readFromFile()))
     improvedSolution()
 }
 
-fun partB() {
+fun partB(input: List<String>): Int {
     var points = 0
-    testList = readFromFile()
+    var testList = input.toMutableList()
     while (testList.isNotEmpty()) {
         val stringOne = testList[0].toSet()
         val stringTwo = testList[1].toSet()
@@ -23,12 +21,11 @@ fun partB() {
         val commonChars = stringOne.intersect(stringTwo.intersect(stringThree))
         points += getCharValue(commonChars)
     }
-    println(points)
+    return points
 }
 
-fun partA() {
+fun partA(testList: List<String>): Int {
     var points = 0
-    testList = readFromFile()
 
     testList.forEach { string ->
         val firstHalf = string.substring(0, string.length / 2).toSet()
@@ -36,7 +33,7 @@ fun partA() {
         val commonChars = firstHalf.intersect(secondHalf)
         points += getCharValue(commonChars)
     }
-    println(points)
+    return points
 }
 
 fun getCharValue(char: Set<Char>): Int {

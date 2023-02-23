@@ -16,16 +16,16 @@ import java.nio.file.Paths
 // SCISSOR == 3
 
 fun main() {
-    partA()
-    partB()
+    partA(readFromFile())
+    partB(readFromFile())
     improvedSolution()
 
 }
 
-fun partB() {
+fun partB(input: List<String>?): Int {
     var points = 0
 
-    readFromFile()?.forEach { line ->
+    input!!.forEach { line ->
         val opponent = line.substring(0, 1)
         val player = line.substring(2, 3)
 
@@ -41,13 +41,13 @@ fun partB() {
             opponent == "C" && player == "Z" -> points += 7 // you win with rock
         }
     }
-    println(points)
+    return points
 }
 
-fun partA() {
+fun partA(input: List<String>?): Int {
     var points = 0
 
-    readFromFile()?.forEach { line ->
+    input!!.forEach { line ->
         if (line.startsWith("A") && line.endsWith("X"))
             points += 4
         else if (line.startsWith("A") && line.endsWith("Y"))
@@ -67,7 +67,7 @@ fun partA() {
         else if (line.startsWith("C") && line.endsWith("Z"))
             points += 6
     }
-    println(points)
+    return points
 }
 
 fun improvedSolution() {

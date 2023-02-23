@@ -4,29 +4,14 @@ import java.nio.file.Files
 import java.nio.file.Paths
 
 fun main() {
-    taskA()
-    taskB()
+    taskA(readFromFile())
+    taskB(readFromFile())
     taskBImproved()
 
 }
-fun taskBImproved() {
-    val files = readFromFile()
-    val dataAsIntList = files?.map { it.toInt() }
-    //Förbättrade version där jag skapar en extension function till List som tar N antal element i listan -
-    //Summerar elementen, returnerar värdet i en ny list. Sedan går ett steg ner i listan och summerar N antal element -
-    //Och repeterar. Resultatet blir en ny lista med de summerade värdena i grupper av storlek N
-    //Inspiration ifrån https://todd.ginsberg.com/post/advent-of-code/2021/day1/
 
-    fun List<Int>.sumGroupOfSize(groupSize: Int): List<Int> {
-        return this.windowed(groupSize, 1) { it.sum() }
-    }
 
-    val listOfGroups = dataAsIntList?.sumGroupOfSize(3)
-    println(listOfGroups?.zipWithNext()?.count { it.first < it.second })
-}
-
-fun taskB() {
-    val files = readFromFile()
+fun taskB(files: MutableList<String>?): Int {
     val listOfGroups = mutableListOf<List<String>>()
 
     if (files != null) {
@@ -53,12 +38,32 @@ fun taskB() {
         }
     }
     println(count)
+    return count
 }
 
-fun taskA() {
-    val files = readFromFile()
+fun taskA(files: MutableList<String>?): Int {
+
     val counts = files!!.map { line -> line.toInt() }.zipWithNext().count { it.first < it.second }
     println(counts)
+    return counts
+}
+fun taskBImproved() {
+    val files = readFromFile()
+    val dataAsIntList = files?.map { it.toInt() }
+
+    /**
+     * Förbättrade version där jag skapar en extension function till List som tar N antal element i listan -
+     * Summerar elementen, returnerar värdet i en ny list. Sedan går ett steg ner i listan och summerar N antal element -
+     * Och repeterar. Resultatet blir en ny lista med de summerade värdena i grupper av storlek N
+     * Inspiration ifrån https://todd.ginsberg.com/post/advent-of-code/2021/day1/
+     */
+
+    fun List<Int>.sumGroupOfSize(groupSize: Int): List<Int> {
+        return this.windowed(groupSize, 1) { it.sum() }
+    }
+
+    val listOfGroups = dataAsIntList?.sumGroupOfSize(3)
+    println(listOfGroups?.zipWithNext()?.count { it.first < it.second })
 }
 
 fun readFromFile(): MutableList<String>? {
